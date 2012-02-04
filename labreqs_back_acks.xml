@@ -1,0 +1,32 @@
+<!-- Copyright (C) The IETF Trust (2012) -->
+<!-- Copyright (C) The Internet Society (2012) -->
+
+<section title="Acknowledgments">
+	<t>
+    Kathleen Moriarty provided the use cases for ITAR and Legal Hold/eDiscovery.
+  </t>
+
+  <t>
+    Dan Walsh provided use cases for Secure Virtualization, Sandboxing,
+    and NFS homedir labeling to handle process separation.
+  </t>
+
+  <t>
+    Trond Myklebust provided use cases for secure diskless NFS clients.
+  </t>
+</section>
+
+<section title="RFC Editor Notes">
+
+<t>
+[RFC Editor: please remove this section prior to publishing
+this document as an RFC]
+
+</t>
+
+<t>
+[RFC Editor: prior to publishing this document as an RFC, please replace all occurrences of RFCTBD10
+with RFCxxxx where xxxx is the RFC number of this document]
+</t>
+
+</section>

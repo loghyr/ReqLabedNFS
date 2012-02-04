@@ -1,0 +1,200 @@
+<!-- Copyright (C) The IETF Trust (2012) -->
+<!-- Copyright (C) The Internet Society (2012) -->
+
+  <references title="Normative References">
+
+    <reference anchor='ref:RFC2119'>
+      <front>
+	<title abbrev='RFC Key Words'>Key words for use in RFCs to Indicate Requirement Levels</title>
+	<author initials='S.' surname='Bradner' fullname='Scott Bradner'>
+	  <organization>Harvard University</organization>
+	  <address>
+	    <postal>
+	      <street>1350 Mass. Ave.</street>
+	      <street>Cambridge</street>
+	    <street>MA 02138</street></postal>
+	    <phone>- +1 617 495 3864</phone>
+	<email>sob@harvard.edu</email></address></author>
+	<date year='1997' month='March' />
+      </front>
+    </reference>
+
+    <reference anchor='ref:RFC2203'>
+    
+      <front>
+      <title>RPCSEC_GSS Protocol Specification</title>
+
+        <author initials='M.' surname='Eisler' fullname='Michael Eisler'>
+        <organization>Sun Microsystems, Inc.</organization>
+        <address>
+        <postal>
+        <street>M/S UCOS03</street>
+        <street>2550 Garcia Avenue</street>
+        <street>Mountain View</street>
+        <street>CA 94043</street></postal>
+        <phone>+1 (719) 599-9026</phone>
+        <email>mre@eng.sun.com</email></address></author>
+  
+        <author initials='A.' surname='Chiu' fullname='Alex Chiu'>
+        <organization>Sun Microsystems, Inc.</organization>
+        <address>
+        <postal>
+        <street>M/S UMPK17-203</street>
+        <street>2550 Garcia Avenue</street>
+        <street>Mountain View</street>
+        <street>CA 94043</street></postal>
+        <phone>+1 (415) 786-6465</phone>
+        <email>hacker@eng.sun.com</email></address></author>
+  
+        <author initials='L.' surname='Ling' fullname='Lin Ling'>
+        <organization>Sun Microsystems, Inc.</organization>
+        <address>
+        <postal>
+        <street>M/S UMPK17-201</street>
+        <street>2550 Garcia Avenue</street>
+        <street>Mountain View</street>
+        <street>CA 94043</street></postal>
+        <phone>+1 (415) 786-5084</phone>
+        <email>lling@eng.sun.com</email></address></author>
+
+      <date year='1997' month='September' />
+      <area>Security</area>
+      <keyword>generic security service</keyword>
+      <keyword>remote procedure call</keyword>
+      <keyword>security</keyword>
+      <abstract>
+      <t>
+         This memo describes an ONC/RPC security flavor that allows RPC
+         protocols to access the Generic Security Services Application
+         Programming Interface (referred to henceforth as GSS-API).
+      </t></abstract></front>
+      
+      <seriesInfo name='RFC' value='2203' />
+      <format type='TXT' octets='50937' target='ftp://ftp.isi.edu/in-notes/rfc2203.txt' />
+      <format type='HTML' octets='64234' target='http://xml.resource.org/public/rfc/html/rfc2203.html' />
+      <format type='XML' octets='50069' target='http://xml.resource.org/public/rfc/xml/rfc2203.xml' />
+    </reference>
+
+    <reference anchor="ref:rpcsecgssv3">
+      <front>
+        <title>Remote Procedure Call (RPC) Security Version 3</title>
+        <author initials="T." surname="Haynes" />
+        <author initials="N." surname="Williams" />
+        <date year="2011" />
+      </front>
+      <seriesInfo name="draft-williams-rpcsecgssv3" value="(work in progress)"/>
+    </reference>
+
+    <reference anchor="ref:lfsreg">
+      <front>
+        <title>Registry Specification for MAC Security Label Formats</title>
+        <author initials="D." surname="Quigley" />
+        <author initials="J." surname="Lu" />
+        <date year="2011" />
+      </front>
+      <seriesInfo name="draft-quigley-label-format-registry" value="(work in progress)"/>
+    </reference>
+
+   <reference anchor='ref:RFC5226'>
+
+   <front>
+   <title>Guidelines for Writing an IANA Considerations Section in RFCs</title>
+   <author initials='T.' surname='Narten' fullname='T. Narten'>
+   <organization /></author>
+   <author initials='H.' surname='Alvestrand' fullname='H. Alvestrand'>
+   <organization /></author>
+   <date year='2008' month='May' />
+   <abstract>
+   <t>Many protocols make use of identifiers consisting of constants and other well-known values. Even after a protocol has been defined and deployment has begun, new values may need to be assigned (e.g., for a new option type in DHCP, or a new encryption or authentication transform for IPsec). To ensure that such quantities have consistent values and interpretations across all implementations, their assignment must be administered by a central authority. For IETF protocols, that role is provided by the Internet Assigned Numbers Authority (IANA).&lt;/t>&lt;t> In order for IANA to manage a given namespace prudently, it needs guidelines describing the conditions under which new values can be assigned or when modifications to existing values can be made. If IANA is expected to play a role in the management of a namespace, IANA must be given clear and concise instructions describing that role. This document discusses issues that should be considered in formulating a policy for assigning values to a namespace and provides guidelines for authors on the specific text that must be included in documents that place demands on IANA.&lt;/t>&lt;t> This document obsoletes RFC 2434. This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t></abstract></front>
+
+   <seriesInfo name='BCP' value='26' />
+   <seriesInfo name='RFC' value='5226' />
+   <format type='TXT' octets='66160' target='ftp://ftp.isi.edu/in-notes/rfc5226.txt' />
+   </reference>
+
+  <reference anchor='ref:RFC4506'>
+    <front>
+      <title>XDR: External Data Representation Standard</title>
+      <author initials='M.' surname='Eisler' fullname='Michael Eisler'>
+	      <organization>NetApp</organization>
+      </author>
+      <date year="2006" month="May" />
+    </front>
+    <seriesInfo name="RFC" value="4506" />
+    <format type="TXT"
+      target="ftp://ftp.isi.edu/in-notes/rfc4506.txt"/>
+  </reference>
+
+    <reference anchor='ref:RFC5661'>
+      <front>
+  <title>Network File System (NFS) Version 4 Minor Version 1 Protocol</title>
+  <author initials="S." surname="Shepler" fullname="S. Shepler">
+    <organization>Storspeed, Inc.</organization>
+  </author>
+  <author initials="M." surname="Eisler" fullname="M. Eisler">
+    <organization>NetApp</organization>
+  </author>
+  <author initials="D." surname="Noveck" fullname="D. Noveck">
+    <organization>NetApp</organization>
+  </author>
+  <date year="2010" month="January"/>
+      </front>
+      <seriesInfo name="RFC" value="5661"/>
+      <format type="TXT" octets="600988" 
+        target="ftp://ftp.isi.edu/in-notes/rfc5661.txt"/>
+    </reference>
+
+</references>
+
+<references title="Informative References">
+
+  <reference anchor='ref:rh_mls'>
+    <front>
+      <title>
+        Section 46.6. Multi-Level Security (MLS) of Deployment Guide:
+        Deployment, configuration and administration of Red Hat Enterprise
+        Linux 5, Edition 6
+      </title>
+      <author />
+      <date year='2011' />
+    </front>
+    <format type='HTML' target='http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Linux/5/html/Deployment_Guide/sec-mls-ov.html' />
+  </reference>
+
+<reference anchor='DTOS'
+target='http://www.cs.utah.edu/flux/fluke/html/dtos/HTML/dtos.html'>
+  <front>
+    <title abbrev='DTOS'>
+      The Distributed Trusted Operating System (DTOS) Home Page
+    </title>
+    <author initials='S.' surname='Smalley' fullname='Stephen Smalley'>
+      <organization>
+      National Security Agency
+      </organization>
+    </author>
+  </front>
+</reference>
+
+  <reference anchor='SENFSV3' target='http://www.nsa.gov/selinux/papers/nfsv3-abs.cfm'>
+    <front>
+      <title abbrev='SENFSv3'>Implementing SELinux Support for NFS</title>
+      <author initials="J.W." surname="Carter" fullname="James W. Carter">
+        <organization abbrev="NSA">
+        National Security Agency
+        </organization>
+        <address>
+          <postal>
+            <street>9800 Savage Rd.</street>
+            <street>Suite 6534</street>
+            <city>Ft. Meade</city>
+            <region>MD</region>
+            <code>20755-6534</code>
+          </postal>
+          <email>jwcart2@tycho.nsa.gov</email>
+        </address>
+      </author>
+    </front>
+  </reference>
+
+
+</references>

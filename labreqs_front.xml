@@ -1,0 +1,89 @@
+<!-- Copyright (C) The IETF Trust (2012) -->
+<!-- Copyright (C) The Internet Society (2012) -->
+
+<front>
+    <title abbrev="labledNFS">
+      Requirements for Labeled NFS
+    </title>
+
+		<author fullname="David Quigley"
+				initials="D."
+				surname="Quiqley">
+      <organization abbrev="Consultant">Consultant</organization>
+			<address>
+				<email>dpquigl@davequigley.com</email>
+			</address>
+		</author>
+
+		<author fullname="James Morris"
+				initials="J."
+				surname="Morris">
+      <organization abbrev="Red Hat">Red Hat, Inc.</organization>
+			<address>
+				<email>jmorris@namei.org</email>
+			</address>
+		</author>
+
+		<author fullname="Jarrett Lu"
+				initials="J."
+				surname="Lu">
+      <organization abbrev="Oracle">Oracle</organization>
+			<address>
+				<email>jarrett.lu@oracle.com</email>
+			</address>
+		</author>
+
+    <author fullname="Stephen Smalley"
+    		initials="S."
+		surname="Smalley">
+	    <organization abbrev="NSA">National Security Agency</organization>
+	    <address>
+		    <email>sds@tycho.nsa.gov</email>
+	    </address>
+    </author>
+
+    <author fullname="Thomas Haynes" 
+            initials="T." 
+            surname="Haynes"
+						role='editor'>
+        <organization abbrev="NetApp">NetApp</organization>
+        <address>
+            <postal>
+                <street>9110 E 66th St</street>
+                <city>Tulsa</city>
+                <region>OK</region>
+                <code>74133</code>
+                <country>USA</country>
+            </postal>
+            <phone>+1 918 307 1415</phone>
+            <email>thomas@netapp.com</email>
+        </address>
+    </author>
+
+    <date year="YEARVAR" month="MONTHVAR" day="DAYVAR"/>
+
+    <area>Transport</area>
+    <workgroup>NFSv4</workgroup>
+
+    <abstract>
+      <t>
+        This Internet-Draft outlines high-level requirements for the
+        integration of flexible Mandatory Access Control (MAC) functionality
+        into NFSv4.2.  It describes the level of protections that should be
+        provided over protocol components and the basic structure of the
+        proposed system.  It also gives a brief explanation of what kinds of
+        protections MAC systems offer.
+      </t>
+    </abstract>
+
+    <note title="Requirements Language">
+<t>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;,
+&quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;,
+&quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;,
+&quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be
+interpreted as described in <xref target="ref:RFC2119">RFC 2119</xref>.
+</t>
+
+    </note>
+
+</front>
