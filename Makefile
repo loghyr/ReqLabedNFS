@@ -5,8 +5,8 @@ YEAR=`date +%Y`
 MONTH=`date +%B`
 DAY=`date +%d`
 PREVVERS=00
-VERS=01
-BASEDOC=draft-haynes-nfsv4-labreqs
+VERS=00
+BASEDOC=draft-quigley-nfsv4-labreqs
 
 autogen/%.xml : %.x
 	@mkdir -p autogen

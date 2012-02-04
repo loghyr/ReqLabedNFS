@@ -2,13 +2,13 @@
 <!-- Copyright (C) The Internet Society (2012) -->
 
 <front>
-    <title abbrev="labledNFS">
+    <title abbrev="ReqLabledNFS">
       Requirements for Labeled NFS
     </title>
 
 		<author fullname="David Quigley"
 				initials="D."
-				surname="Quiqley">
+				surname="Quigley">
       <organization abbrev="Consultant">Consultant</organization>
 			<address>
 				<email>dpquigl@davequigley.com</email>
