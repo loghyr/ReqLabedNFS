@@ -1,10 +1,7 @@
 <section anchor='iana' title="IANA Considerations">
   <t>
-    It is requested that IANA creates a registry of Domain of
-    Interpretation numbers to be consumed by a Domain of Interpretation
-    authority which will provide the mappings. A range of these numbers should be
-    reserved for private DOIs that are consumed solely on internal networks
-    analogous to the 127 and 198 class A ip ranges for IPv4.
+    It is requested that IANA creates a registry of Label Formats to
+    describe the syntactic format and semantics of the security label.
   </t> 
 </section>
 

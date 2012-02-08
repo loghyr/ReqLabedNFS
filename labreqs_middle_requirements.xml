@@ -94,55 +94,55 @@
     </t>
 
     <t>
-      In MAC models, a Domain of Interpretation (DOI) represents a
-      collection of systems, where all systems within the DOI have
-      semantically coherent labeling.  That is, a security label must always
-      mean exactly the same thing anywhere within the DOI. While this may not be
+      MAC models base access decisions on security attributes bound to
+      subjects and objects. With a given MAC model, all systems have
+      semantically coherent labeling - a security label must always
+      mean exactly the same thing on every system. While this may not be
       necessary for simple MAC models it is recommended that most label formats
       assigned an LFS incorporate this concept into their label format.
     </t>
 
     <t>
       LNFS must provide a means for servers and clients to identify their
-      LFS and DOIs for the purposes of authorization, security service selection, and
+      LFS for the purposes of authorization, security service selection, and
       security label interpretation.
     </t>
 
     <t>
       A negotiation scheme should be provided, allowing systems from
-      different label formats and DOIs to agree on how they will interpret or
-      translate each others labels.  Multiple concurrent DOI agreements may be
+      different label formats to agree on how they will interpret or
+      translate each others labels.  Multiple concurrent agreements may be
       current between a server and a client.
     </t>
 
     <t>
       All security labels and related security state transferred across the
-      network must be tagged with a valid LFS and where applicable DOI.
+      network must be tagged with a valid LFS.
     </t>
 
     <t>
-      If the LFS or DOI of a system changes, it should renegotiate agreements to
+      If the LFS of a system changes, it should renegotiate agreements to
       reflect these changes.
     </t>
 
     <t>
       If a system receives any security label or security state tagged with an
-      LFS or DOI it does not recognize or cannot interpret, it must reject that label
+      LFS it does not recognize or cannot interpret, it must reject that label
       or state.
     </t>
 
     <t>
-      NFSv4.2 includes features which may cause a client to cross an LFS or DOI
-      boundary when accessing what appears to be a single file system.  If LFS and
-      DOI negotiation is supported by the client and the server, the server should
+      NFSv4.2 includes features which may cause a client to cross an LFS 
+      boundary when accessing what appears to be a single file system.  If LFS
+      negotiation is supported by the client and the server, the server should
       negotiate a new, concurrent agreement with the client, acting on behalf of
       the externally located source of the files.
     </t>
 
     <t>
-      LNFS should define an initial DOI negotiation scheme and DOI format
+      LNFS should define an initial negotiation scheme
       with the primary aims of simplicity and completeness.  This is to
-      facilitate practical deployment of multi-DOI systems without being
+      facilitate practical deployment of systems without being
       weighed down by complex and over-generalized global schemes.  Future
       extensibility should also be taken into consideration.
     </t>
@@ -269,7 +269,7 @@
         label specified by the client due to restrictions in the server policy.
         The server should not attempt to find a suitable label for an object in event
         of different labeling rules on its end.  The server is allowed to translate
-        the label into its DOI but should not change the semantic meaning of the label.
+        the label but should not change the semantic meaning of the label.
       </t>
     </section>
   </section>
