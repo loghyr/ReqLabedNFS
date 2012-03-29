@@ -6,42 +6,6 @@
       Requirements for Labeled NFS
     </title>
 
-		<author fullname="David Quigley"
-				initials="D."
-				surname="Quigley">
-      <organization abbrev="Consultant">Consultant</organization>
-			<address>
-				<email>dpquigl@davequigley.com</email>
-			</address>
-		</author>
-
-		<author fullname="James Morris"
-				initials="J."
-				surname="Morris">
-      <organization abbrev="Red Hat">Red Hat, Inc.</organization>
-			<address>
-				<email>jmorris@namei.org</email>
-			</address>
-		</author>
-
-		<author fullname="Jarrett Lu"
-				initials="J."
-				surname="Lu">
-      <organization abbrev="Oracle">Oracle</organization>
-			<address>
-				<email>jarrett.lu@oracle.com</email>
-			</address>
-		</author>
-
-    <author fullname="Stephen Smalley"
-    		initials="S."
-		surname="Smalley">
-	    <organization abbrev="NSA">National Security Agency</organization>
-	    <address>
-		    <email>sds@tycho.nsa.gov</email>
-	    </address>
-    </author>
-
     <author fullname="Thomas Haynes" 
             initials="T." 
             surname="Haynes"

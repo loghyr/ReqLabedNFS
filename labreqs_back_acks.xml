@@ -2,6 +2,15 @@
 <!-- Copyright (C) The Internet Society (2012) -->
 
 <section title="Acknowledgments">
+  <t>
+    David Quigley was the early energy in motivating the entire LNFS effort.
+  </t>
+
+  <t>
+    James Morris, Jarrett Lu, and Stephen Smalley all were key contributers to both
+    early versions of this document and to many conference calls.
+  </t>
+
 	<t>
     Kathleen Moriarty provided the use cases for ITAR and Legal Hold/eDiscovery.
   </t>
