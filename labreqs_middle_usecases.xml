@@ -29,7 +29,7 @@
       remotely mounted, and fine-grained MAC policy is implemented to
       protect, for example, private user data from being read by malicious
       web scripts running in the user's browser.  With Labeled NFS,
-      fine-grained MAC labeling of the user's files will allow the local MAC
+      fine-grained MAC labeling of the user's files will allow the MAC
       policy to be implemented and provide the desired protection.
     </t>
   </section>
@@ -38,7 +38,7 @@
     <t>
       Virtualization is now a commonly implemented feature of modern
       operating systems, and there is a need to ensure that MAC security
-      policy is able to to protect virtualized resources.  A common
+      policy is able to protect virtualized resources.  A common
       implementation scheme involves storing virtualized guest filesystems
       on a networked server, which are then mounted remotely by guests upon
       instantiation.  In this case, there is a need to ensure that the
@@ -119,12 +119,12 @@
       where nodes may be running a variety of operating systems with
       different security mechanisms and security policies.  It is desired
       that network file servers be simply capable of storing and retrieving
-      MAC security labels for clients which use such labels.  The Labeled
-      NFS protocol would be implemented here solely to enable transport of
+      MAC security labels for clients which use such labels.  The LNFS
+      protocol would be implemented here solely to enable transport of
       MAC security labels across the network.  It should be noted that in
       such an environment, overall security cannot be as strongly enforced
-      as in case (a), and that this scheme is aimed at allowing MAC-capable
-      clients to function with local MAC security policy enabled rather
+      as when the server is also enforcing, and that this scheme is aimed at
+      allowing MAC-capable clients to function with its MAC security policy enabled rather
       than perhaps disabling it entirely.
     </t>
   </section>
@@ -242,14 +242,14 @@
         access a Top Secret directory.  As in the previous example,
         this is denied since Secret does not dominate Top Secret.  If
         the process were operating at Top Secret it would pass the
-        local access control check and the NFSv4.2 operation would
+        its access control check and the NFSv4.2 operation would
         proceed as in a normal NFSv4.2 environment.
       </t>
 
       <t>
         Note that in this scenario, all of the clients must be MAC
         functional. A single client which does
-        not do local access control checks would violate the 
+        not do its access control checks would violate the 
         model.
       </t>
     </section>

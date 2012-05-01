@@ -82,7 +82,7 @@
     </t>
   </section>
 
-  <section anchor='req:encdoi' title='Label Encoding, Label Format Specifiers, and Labeling Authorities'>
+  <section anchor='req:encdoi' title='Label Encoding, Label Format Specifiers, and Label Checking Authorities'>
     <t>
       Encoding of MAC labels and attributes passed over the network must
       be specified in a complete and unambiguous manner while maintaining the
@@ -121,7 +121,7 @@
     </t>
 
     <t>
-      If the LFS of a system changes, it should renegotiate agreements to
+      If the LFS supported on a system changes, it should renegotiate agreements to
       reflect these changes.
     </t>
 
@@ -164,21 +164,21 @@
       <t>
         An example of an operation in full mode is as follows. On the initial lookup,
         the client requests access to an object on the server. It sends its process
-        security context over to the server. The server checks all relevant local
+        security context over to the server. The server checks all relevant
         policies to determine if that process context from that client is allowed to
         access the resource. Once this has succeeded the object with its associated
         security information is released to the client. Once the client receives the
-        object it determines if its local policy allows the process running on the
+        object it determines if its policies allow the process running on the
         client access to the object.
       </t>
 
       <t>
         On subsequent operations where the client already has a handle for the file,
         the order of enforcement is reversed. Since the client already has the security
-        context it may make an access decision against its local policy first. This
+        context it may make an access decision against its policy first. This
         enables the client to avoid sending requests to the server that it knows will
-        fail regardless of the server's policy. If the client passes the local policy
-        check then it sends the request to the server where the client's process
+        fail regardless of the server's policy. If the client passes its policy
+        checks then it sends the request to the server where the client's process
         context is used to determine if the server will release that resource to the
         client. If both checks pass, the client is given the resource and everything
         succeeds.
@@ -218,7 +218,7 @@
       <t>
         In other words, Guest Mode is standard NFSv4.2 over the wire, with the MAC-aware
         system mapping the MAC-unaware system's processes or objects to security
-        labels based on other characteristics in order to preserve its local MAC
+        labels based on other characteristics in order to preserve its MAC
         guarantees.
       </t>
     </section>
@@ -246,7 +246,7 @@
       </t>
       <t>
         When an object is newly created by the client, it will calculate the label for
-        the object based on its local policy. Once that is done it will send the
+        the object based on its policy. Once that is done it will send the
         request to the server which has the ability to deny the creation of the object
         with that label based on the server's policy. In creating the file the server
         must ensure that the label is bound to the object before the object becomes
@@ -277,7 +277,7 @@
   <section anchor='req:enforce' title='Policy Enforcement'>
     <section anchor='req:enforce:full' title='Full Mode'>
       <t>
-        The server must enforce its local security policy over all exported
+        The server must enforce its security policy over all exported
         objects, for operations which originate both locally and remotely.
       </t>
       <t>
@@ -322,7 +322,7 @@
       <t>
         If the server is MAC aware and the client is not, the server must not
         accept security labels provided by the client, and only enforce its
-        local policy to exported objects. In the event that
+        policy to exported objects. In the event that
         the client is MAC aware while the server is not then the client may
         deny access or fall back on other methods for providing security labeling.
       </t>
