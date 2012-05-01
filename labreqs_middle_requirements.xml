@@ -156,9 +156,9 @@
 
     <section anchor='req:opmodes:full' title='Full Mode'>
       <t>
-        Both the server and the client have MAC functionality enabled, and
-        full LNFS functionality is extended over the network between
-        both client and server.
+        The server and the client have mutually recognized MAC
+        functionality enabled, and full LNFS functionality is extended over the
+        network between both client and server.
       </t>
 
       <t>
