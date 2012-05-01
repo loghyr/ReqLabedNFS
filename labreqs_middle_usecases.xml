@@ -192,8 +192,8 @@
     <section anchor='ss:examples:fm' title='Full Mode - MAC functional Client and Server'>
       <t>
         In the first part of this example a process on the client is running
-        at the Secret level.  The process issues a readdir system call which
-        enters the kernel.  Before translating the readdir system call into a
+        at the Secret level.  The process issues a readdir() system call which
+        enters the kernel.  Before translating the readdir() system call into a
         request to the NFSv4.2 server the host operating system will consult
         the MAC module to see if the operation is allowed.  Since the process
         is operating at Secret and the directory to be accessed is labeled
@@ -205,7 +205,7 @@
         Consider a second case where instead of running at Secret the process
         is running at Top Secret.  In this case the sensitivity of the
         process is equal to or greater than that of the directory so the MAC
-        module will allow the request.  Now the readdir is translated into
+        module will allow the request.  Now the readdir() is translated into
         the necessary NFSv4.2 call to the server.  For the RPC request the
         client is using the proper credential to assert to the server that
         the process is running at Top Secret.
@@ -244,6 +244,13 @@
         the process were operating at Top Secret it would pass the
         local access control check and the NFSv4.2 operation would
         proceed as in a normal NFSv4.2 environment.
+      </t>
+
+      <t>
+        Note that in this scenario, all of the clients must be MAC
+        functional. A single client which does
+        not do local access control checks would violate the 
+        model.
       </t>
     </section>
 

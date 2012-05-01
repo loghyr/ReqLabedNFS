@@ -37,7 +37,7 @@
       implementations where possible.
     </t>
     <t>
-      LNFS should be respond in a robust manner to system and network
+      LNFS should respond in a robust manner to system and network
       outages associated with typical enterprise and Internet environments.  At the
       very least, LNFS should always operate in a fail-safe manner, so that service
       disruptions do not cause or facilitate security vulnerabilities.
