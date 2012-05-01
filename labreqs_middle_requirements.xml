@@ -20,7 +20,7 @@
     </t>
 
     <t>
-      LNFS modifications to standard NFSv4.2 implementations must not adversely
+      LNFS modifications to standard NFSv4.2 <xref target="ref:nfsv4.2" /> implementations must not adversely
       impact any existing interoperability of those implementations.
     </t>
   </section>

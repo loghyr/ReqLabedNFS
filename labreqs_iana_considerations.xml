@@ -1,7 +1,8 @@
 <section anchor='iana' title="IANA Considerations">
   <t>
     It is requested that IANA creates a registry of Label Formats to
-    describe the syntactic format and semantics of the security label.
+    describe the syntactic format and semantics of the security label
+    (see <xref target="ref:lfsreg" />).
   </t> 
 </section>
 

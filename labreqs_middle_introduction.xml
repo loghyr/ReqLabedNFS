@@ -73,7 +73,7 @@
       </t>
 
       <t hangText='Label Format Registry:'>
-        is the IANA registry containing all registered
+        is the IANA registry (see <xref target="ref:lfsreg" />) containing all registered
         LFS along with references to the documents that
         describe the syntactic format and semantics of the security label.
       </t>
