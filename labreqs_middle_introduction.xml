@@ -4,8 +4,8 @@
 <section anchor="sec:intro" title="Introduction">
   <t>
     Mandatory Access Control (MAC) systems have been mainstreamed in
-    modern operating systems such as Linux (R), FreeBSD (R), Solaris
-    (TM), and Windows Vista (R).  MAC systems bind security attributes to
+    modern operating systems such as Linux (R), FreeBSD (R), and Solaris
+    (TM).  MAC systems bind security attributes to
     subjects (processes) and objects within a system.  These attributes
     are used with other information in the system to make access control
     decisions.

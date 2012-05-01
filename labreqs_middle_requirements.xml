@@ -88,9 +88,9 @@
       be specified in a complete and unambiguous manner while maintaining the
       flexibility of MAC implementations. To accomplish this the labels
       should consist of an opaque component bound with a Label Format Specifier (LFS).
-      The opaque component consists of the label which will be interpreted by the MAC
-      model on the other end while the LFS provides a mechanism for identifying the
-      structure and semantics of the label's components.
+      The LFS component provides a mechanism for identifying the structure and semantics of the
+      opaque component.  Meanwhile, the opaque component is the security label which will
+      be interpreted by the MAC models.
     </t>
 
     <t>
@@ -349,7 +349,7 @@
       Therefore, if an existing server is upgraded to include LNFS support,
       then it is the responsibility of the security system to
       define the behavior for existing objects. For example, if
-      the security system is LFS 0, which means the server just
+      the security system is that the server just
       stores and returns labels, then existing files should
       return labels which are set to an empty value.
     </t>
