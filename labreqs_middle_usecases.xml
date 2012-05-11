@@ -189,7 +189,7 @@
       also labeled Top Secret.
     </t>
 
-    <section anchor='ss:examples:fm' title='Full Mode - MAC functional Client and Server'>
+    <section anchor='ss:examples:fm' title='Full Mode - MAC-functional Client and Server'>
       <t>
         In the first part of this example a process on the client is running
         at the Secret level.  The process issues a readdir() system call which
@@ -234,29 +234,52 @@
       </t>
     </section>
 
-    <section anchor='ss:examples:pec' title='MAC functional Client'>
+    <section anchor='ss:examples:mec' title='MAC-Functional Client'>
       <t>
-        With a client that is MAC functional and a server which is not,
-        this example is identical to the first part of the previous
-        example.  A process on the client labeled Secret wishes to
-        access a Top Secret directory.  As in the previous example,
-        this is denied since Secret does not dominate Top Secret.  If
-        the process were operating at Top Secret it would pass the
-        its access control check and the NFSv4.2 operation would
-        proceed as in a normal NFSv4.2 environment.
+        In these scenarios, the server is either non-MAC-Aware or MAC-Aware.
+        The actions of the client will depend whether it is configured to
+        treat the MAC-Aware server in the same manner as the non-MAC-Aware one.
+        I.e., does it utilize the approach presented in <xref target="req:opmodes:guest" />
+        or does it allow the MAC-Aware server to return labels?
       </t>
 
       <t>
-        Note that in this scenario, all of the clients must be MAC
-        functional. A single client which does
-        not do its access control checks would violate the 
-        model.
+          With a client that is MAC-Functional and using the example in the
+          previous section, the result should be the same. The one difference
+          is that all decisions are made on the client.
       </t>
+
+      <section anchor='ss:examples:mfcmas' title='MAC-Aware Server'>
+        <t>
+          A process on the client
+          labeled Secret wishes to access a directory labeled Top Secret
+          on the server.  This is denied since Secret does not dominate Top Secret.  Note
+          that there will be NFSv4.2 operations issued that return an object
+          label for the client to process.
+        </t>
+
+        <t>
+          Note that in this scenario, all of the clients must be MAC-Functional.
+          A single client which does not do its access control checks would
+          violate the model.
+        </t>
+      </section>
+
+      <section anchor='ss:examples:mfcnmas' title='Non-MAC-Aware Server'>
+        <t>
+          A process on the client labeled Secret wishes to access a directory
+          which the client's policies label as Top Secret on the server.  This
+          is denied since Secret does not dominate Top Secret.  Note
+          that there will not be NFSv4.2 operations issued. If the process
+          had instead a Top Secret process label, the client would issue
+          NFSv4.2 operations to access the directory on the server.
+        </t>
+      </section>
     </section>
 
-    <section anchor='ss:examples:pes' title='MAC functional Server'>
+    <section anchor='ss:examples:pes' title='MAC-Functional Server'>
       <t>
-        With a MAC functional server and a client which is not, the
+        With a MAC-Functional server and a client which is not, the
         client behaves as if it were in a normal NFSv4.2 environment.
         Since the process on the client does not provide a security
         attribute the server must define a mechanism for labeling all
@@ -271,13 +294,4 @@
       </t>
     </section>
   </section>
-</section>
-
-<section anchor="sec:security" title="Security Considerations">
-  <t>
-    When either the client or server is operating in guest mode it is important to
-    realize that one side is not enforcing MAC protections. Alternate methods are
-    being used to handle the lack of MAC support and care should be taken to
-    identify and mitigate threats from possible tampering outside of these methods.
-  </t>
 </section>

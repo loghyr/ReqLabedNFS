@@ -38,24 +38,24 @@
   <t>
     <list style='format (%d)'>
       <t>
-        Clients must be able to convey to the server the security
+        Clients MUST be able to convey to the server the security
         attribute of the subject making the access request.  The server
         may provide a mechanism to enforce MAC policy based on the
         requesting subject's security attribute.
       </t>
 
       <t>
-        Server must be able to store and retrieve the security attribute
+        Servers MUST be able to store and retrieve the security attribute
         of exported files as requested by the client.
       </t>
 
       <t>
-        Server must provide a mechanism for notifying clients of attribute
+        Servers MUST provide a mechanism for notifying clients of attribute
         changes of files on the server.
       </t>
 
       <t>
-        Clients and Servers must be able to negotiate Label Formats 
+        Clients and Servers MUST be able to negotiate Label Formats
         and provide a mechanism to translate between them as needed.
       </t>
     </list>
@@ -68,8 +68,7 @@
       <t hangText='Label Format Specifier (LFS):'>
         is an identifier used by the client to establish
         the syntactic format of the security label and the semantic meaning
-        of its components.  These specifiers exist in a registry associated
-        with documents describing the format and semantics of the label.
+        of its components.
       </t>
 
       <t hangText='Label Format Registry:'>
@@ -92,10 +91,19 @@
       </t>
 
       <t hangText='Subject:'>
-        A subject is an active entity usually a process which is
+        is an active entity, usually a process, which is
         requesting access to an object.
       </t>
-  
+
+      <t hangText='MAC-Aware:'>
+        is a server which can transmit and store object labels.
+      </t>
+
+      <t hangText='MAC-Functional:'>
+        is a client or server which is LNFS enabled. Such a system can interpret labels and
+        apply policies based on the security system.
+      </t>
+
       <t hangText='Multi-Level Security (MLS):'>
         is a traditional model where objects are given a sensitivity
         level (Unclassified, Secret, Top Secret,  etc) and a category set

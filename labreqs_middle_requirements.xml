@@ -9,44 +9,45 @@
 
   <section anchor='req:portinter' title='Portability & Interoperability'>
     <t>
-      LNFS must be designed with portability in mind, to
+      LNFS MUST be designed with portability in mind, to
       facilitate implementations on any operating system that supports mandatory
       access controls.
     </t>
 
     <t>
-      LNFS must be designed and developed to facilitate interoperability between
+      LNFS MUST be designed and developed to facilitate interoperability between
       different LNFS implementations.
     </t>
 
     <t>
-      LNFS modifications to standard NFSv4.2 <xref target="ref:nfsv4.2" /> implementations must not adversely
+      LNFS modifications to standard NFSv4.2 <xref target="ref:nfsv4.2" />
+      implementations MUST not adversely
       impact any existing interoperability of those implementations.
     </t>
   </section>
 
   <section anchor='req:perfscale' title='Performance & Scalability'>
     <t>
-      Security mechanisms often impact on system performance.  LNFS should
+      Security mechanisms often impact on system performance.  LNFS SHOULD
       be designed and implemented in a way which avoids significant performance
       impact where possible.
     </t>
     <t>
       As NFSv4.2 is designed for large-scale distributed networking, LNFS
-      should also be capable of scaling in a similar manner to underlying
+      SHOULD also be capable of scaling in a similar manner to underlying
       implementations where possible.
     </t>
     <t>
-      LNFS should respond in a robust manner to system and network
+      LNFS SHOULD respond in a robust manner to system and network
       outages associated with typical enterprise and Internet environments.  At the
-      very least, LNFS should always operate in a fail-safe manner, so that service
+      very least, LNFS SHOULD always operate in a fail-safe manner, so that service
       disruptions do not cause or facilitate security vulnerabilities.
     </t>
   </section>
 
   <section anchor='req:secserv' title='Security Services'>
     <t>
-      LNFS should ensure that the following security services are provided for
+      LNFS SHOULD ensure that the following security services are provided for
       all NFSv4.2 messaging. These services may be provided by lower layers even if NFS
       has to be aware of and leverage them:
 
@@ -59,7 +60,7 @@
 
     <t>
       Mechanisms and algorithms used in the provision of security services
-      must be configurable, so that appropriate levels of protection may be flexibly
+      MUST be configurable, so that appropriate levels of protection may be flexibly
       specified per mandatory security policy.
     </t>
 
@@ -69,14 +70,14 @@
     </t>
 
     <t>
-      MAC security labels and any related security state must always be
+      MAC security labels and any related security state SHOULD always be
       protected by these security services when transferred over the network;
-      as must the binding of labels and state to associated objects and
+      as SHOULD the binding of labels and state to associated objects and
       subjects.
     </t>
 
     <t>
-      LNFS should support authentication on a context granularity so
+      LNFS SHOULD support authentication on a context granularity so
       that different contexts running on a client can use different
       cryptographic keys and facilities.
     </t>
@@ -84,10 +85,10 @@
 
   <section anchor='req:encdoi' title='Label Encoding, Label Format Specifiers, and Label Checking Authorities'>
     <t>
-      Encoding of MAC labels and attributes passed over the network must
+      Encoding of MAC labels and attributes passed over the network MUST
       be specified in a complete and unambiguous manner while maintaining the
       flexibility of MAC implementations. To accomplish this the labels
-      should consist of an opaque component bound with a Label Format Specifier (LFS).
+      MUST consist of an opaque component bound with a Label Format Specifier (LFS).
       The LFS component provides a mechanism for identifying the structure and semantics of the
       opaque component.  Meanwhile, the opaque component is the security label which will
       be interpreted by the MAC models.
@@ -96,20 +97,20 @@
     <t>
       MAC models base access decisions on security attributes bound to
       subjects and objects. With a given MAC model, all systems have
-      semantically coherent labeling - a security label must always
+      semantically coherent labeling - a security label MUST always
       mean exactly the same thing on every system. While this may not be
       necessary for simple MAC models it is recommended that most label formats
       assigned an LFS incorporate this concept into their label format.
     </t>
 
     <t>
-      LNFS must provide a means for servers and clients to identify their
+      LNFS MUST provide a means for servers and clients to identify their
       LFS for the purposes of authorization, security service selection, and
       security label interpretation.
     </t>
 
     <t>
-      A negotiation scheme should be provided, allowing systems from
+      A negotiation scheme SHOULD be provided, allowing systems from
       different label formats to agree on how they will interpret or
       translate each others labels.  Multiple concurrent agreements may be
       current between a server and a client.
@@ -117,41 +118,65 @@
 
     <t>
       All security labels and related security state transferred across the
-      network must be tagged with a valid LFS.
+      network MUST be tagged with a valid LFS.
     </t>
 
     <t>
-      If the LFS supported on a system changes, it should renegotiate agreements to
+      If the LFS supported on a system changes, it SHOULD renegotiate agreements to
       reflect these changes.
     </t>
 
     <t>
       If a system receives any security label or security state tagged with an
-      LFS it does not recognize or cannot interpret, it must reject that label
+      LFS it does not recognize or cannot interpret, it MUST reject that label
       or state.
     </t>
 
     <t>
       NFSv4.2 includes features which may cause a client to cross an LFS 
       boundary when accessing what appears to be a single file system.  If LFS
-      negotiation is supported by the client and the server, the server should
+      negotiation is supported by the client and the server, the server SHOULD
       negotiate a new, concurrent agreement with the client, acting on behalf of
       the externally located source of the files.
     </t>
 
     <t>
-      LNFS should define an initial negotiation scheme
+      LNFS SHOULD define an initial negotiation scheme
       with the primary aims of simplicity and completeness.  This is to
       facilitate practical deployment of systems without being
       weighed down by complex and over-generalized global schemes.  Future
-      extensibility should also be taken into consideration.
+      extensibility SHOULD also be taken into consideration.
     </t>
   </section>
 
   <section anchor='req:opmodes' title='Modes of Operation'>
     <t>
-    LNFS must cater for two potentially concurrent operating modes,
-    depending on the state of MAC functionality:
+      In a LNFS client and server interaction, we can describe three modes of
+      operation:
+
+      <list style='numbers'>
+        <t>
+          Full
+        </t>
+
+        <t>
+          Limited Server
+        </t>
+
+        <t>
+          Guest
+        </t>
+      </list>
+
+      These modes arise from the level of MAC functionality in the clients and
+      servers.  The clients can be non-MAC-Functional and MAC-Functional. 
+      The servers can be non-MAC-Functional, MAC-Aware, and MAC-Functional.
+    </t>
+
+    <t>
+      A MAC-Functional client MUST be able to determine the level of MAC
+      functionality in the server.  Likewise, a MAC-Functional server MUST
+      be able to determine whether or not a client is MAC-Functional.
     </t>
 
     <section anchor='req:opmodes:full' title='Full Mode'>
@@ -191,23 +216,40 @@
       </t>
     </section>
 
+    <section anchor='req:opmodes:limited' title='Limited Server Mode'>
+      <t>
+        The server is MAC-Aware and the clients are MAC-Functional. The server can
+        store and transmit labels. It cannot enforce labels. The server SHOULD
+        inform clients when an object label changes for a file the client
+        has open.
+      </t>
+      <t>
+        In this mode, the server may not be aware of the format of any its
+        object labels. Indeed, it may service several different security models
+        at the same time. A client MUST process foreign labels as discussed
+        in <xref target="req:encdoi" />. As with the Guest Mode, this mode's
+        level of trust can be degraded if non-MAC-functional clients have
+        access to the server.
+      </t>
+    </section>
+
     <section anchor='req:opmodes:guest' title='Guest Mode'>
       <t>
-        Only one of the server or client has MAC functionality enabled.
+        Only one of the server or client is MAC-Functional enabled.
       </t>
 
       <t>
-        In the case of the server only having MAC functionality enabled, the server
-        locally enforces its policy, and may selectively provide standard NFS
+        In the case of the server only being MAC-Functional, the server
+        enforces its policy, and may selectively provide standard NFS
         services to clients based on their authentication credentials and/or
-        associated network attributes (e.g. IP address, network interface)
+        associated network attributes (e.g., IP address, network interface)
         according to security policy.  The level of trust and access extended
         to a client in this mode is configuration-specific.
       </t>
 
       <t>
-        In the case of the client only having MAC functionality enabled, the
-        client must operate as a standard NFSv4.2 client, and should selectively
+        In the case of the client only being MAC-Functional, the
+        client MUST operate as a standard NFSv4.2 client, and SHOULD selectively
         provide processes access to servers based upon the security
         attributes of the local process, and network attributes of the server,
         according to policy.  The client may also override default labeling of
@@ -216,8 +258,8 @@
       </t>
 
       <t>
-        In other words, Guest Mode is standard NFSv4.2 over the wire, with the MAC-aware
-        system mapping the MAC-unaware system's processes or objects to security
+        In other words, Guest Mode is standard NFSv4.2 over the wire, with the MAC-Functional
+        system mapping the non-MAC-Functional system's processes or objects to security
         labels based on other characteristics in order to preserve its MAC
         guarantees.
       </t>
@@ -226,7 +268,7 @@
 
   <section anchor='req:labeling' title='Labeling'>
     <t>
-      Implementations must validate security labels supplied over the network to
+      Implementations MUST validate security labels supplied over the network to
       ensure that they are within a set of labels permitted from a specific peer,
       and if not, reject them.  Note that a system may permit a different set of
       labels to be accepted from each peer.
@@ -234,9 +276,9 @@
 
     <section anchor='req:labeling:client' title='Client Labeling'>
       <t>
-        At the client, labeling semantics for NFS mounted file systems must remain
+        At the client, labeling semantics for NFS mounted file systems MUST remain
         consistent with those for locally mounted file systems.  In particular,
-        user-level labeling operations local to the client must be enacted locally via
+        user-level labeling operations local to the client MUST be enacted locally via
         existing APIs, to ensure compatibility and consistency for applications and
         libraries.
       </t>
@@ -249,7 +291,7 @@
         the object based on its policy. Once that is done it will send the
         request to the server which has the ability to deny the creation of the object
         with that label based on the server's policy. In creating the file the server
-        must ensure that the label is bound to the object before the object becomes
+        MUST ensure that the label is bound to the object before the object becomes
         visible to the rest of the system.  This ensures that any access control or
         further labeling decisions are correct for the object.
       </t>
@@ -257,19 +299,19 @@
 
     <section anchor='req:labeling:server' title='Server Labeling'>
       <t>
-        The server must provide the capability for clients to retrieve security labels
+        The server MUST provide the capability for clients to retrieve security labels
         on all exported file system objects where possible.  This includes cases where
         only in-core and/or read-only security labels are available at the server for
         any of its exported file systems.
       </t>
 
       <t>
-        The server must honor the ability for a client to specify the label of an
+        The server MUST honor the ability for a client to specify the label of an
         object on creation.  If the server is MAC enabled it may choose to reject the
         label specified by the client due to restrictions in the server policy.
-        The server should not attempt to find a suitable label for an object in event
+        The server SHOULD not attempt to find a suitable label for an object in event
         of different labeling rules on its end.  The server is allowed to translate
-        the label but should not change the semantic meaning of the label.
+        the label but SHOULD not change the semantic meaning of the label.
       </t>
     </section>
   </section>
@@ -277,53 +319,53 @@
   <section anchor='req:enforce' title='Policy Enforcement'>
     <section anchor='req:enforce:full' title='Full Mode'>
       <t>
-        The server must enforce its security policy over all exported
+        The server MUST enforce its security policy over all exported
         objects, for operations which originate both locally and remotely.
       </t>
       <t>
-        Requests from authenticated clients must be processed using security
+        Requests from authenticated clients MUST be processed using security
         labels and credentials supplied by the client as if they originated
         locally.
       </t>
       <t>
-        As with labeling, the system must also take into account any other
+        As with labeling, the system MUST also take into account any other
         volatile client security state, such as a change in process security
-        context via dynamic transition.  Access decisions should also be made
+        context via dynamic transition.  Access decisions SHOULD also be made
         based upon the current client security label accessing the object,
         rather than the security label which opened it, if different.
       </t>
       <t>
-        The client must apply its own policy to remotely located objects, using
-        security labels for the objects obtained from the server.  It must be
+        The client MUST apply its own policy to remotely located objects, using
+        security labels for the objects obtained from the server.  It MUST be
         possible to configure the maximum length of time a client may cache
         state regarding remote labels before re-validating that state with the
         server.
       </t>
       <t>
-        The server must recall delegation of an object if the object's security
+        The server MUST recall delegation of an object if the object's security
         label changes.
       </t>
       <t>
-        A mechanism must exist to allow the client to obtain access, and labeling
+        A mechanism MUST exist to allow the client to obtain access, and labeling
         decisions from the server for locally cached and delegated objects, so
         that it may apply the server's policy to these objects.  If the server's
-        policy changes, the client must flush all object state back to the
-        server.  The server must ensure that any flushed state received is
+        policy changes, the client MUST flush all object state back to the
+        server.  The server MUST ensure that any flushed state received is
         consistent with current policy before committing it to stable storage.
       </t>
       <t>
         Any local security state associated with cached or delegated objects
-        must also be flushed back to the server when any other state of the
+        MUST also be flushed back to the server when any other state of the
         objects is required to be flushed back.
       </t>
     </section>
 
     <section anchor='req:enforce:guest' title='Guest Mode'>
       <t>
-        If the server is MAC aware and the client is not, the server must not
+        If the server is MAC-Functional and the client is not, the server MUST not
         accept security labels provided by the client, and only enforce its
         policy to exported objects. In the event that
-        the client is MAC aware while the server is not then the client may
+        the client is MAC-Functional while the server is not then the client may
         deny access or fall back on other methods for providing security labeling.
       </t>
     </section>
@@ -331,7 +373,7 @@
 
   <section anchor='req:namespace' title='Namespace Access'>
     <t>
-      The server should provide a means to authorize selective access to the
+      The server SHOULD provide a means to authorize selective access to the
       exported file system namespace based upon client credentials and
       according to security policy.
     </t>
@@ -345,13 +387,10 @@
 
   <section anchor='req:upgrade' title='Upgrading Existing Server'>
     <t>
-      Note that under the MAC model, all objects must have labels.
+      Note that under the MAC model, all objects MUST have labels.
       Therefore, if an existing server is upgraded to include LNFS support,
       then it is the responsibility of the security system to
-      define the behavior for existing objects. For example, if
-      the security system is that the server just
-      stores and returns labels, then existing files should
-      return labels which are set to an empty value.
+      define the behavior for existing objects.
     </t>
   </section>
 </section>

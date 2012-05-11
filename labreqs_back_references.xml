@@ -83,7 +83,7 @@ target='http://www.cs.utah.edu/flux/fluke/html/dtos/HTML/dtos.html'>
   </front>
 </reference>
 
-  <reference anchor='SENFSV3' target='http://www.nsa.gov/selinux/papers/nfsv3-abs.cfm'>
+  <reference anchor='SENFSV3' target='http://www.nsa.gov/research/_files/selinux/papers/nfsv3.pdf'>
     <front>
       <title abbrev='SENFSv3'>Implementing SELinux Support for NFS</title>
       <author initials="J.W." surname="Carter" fullname="James W. Carter">

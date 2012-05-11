@@ -7,7 +7,7 @@
   </t>
 
   <t>
-    James Morris, Jarrett Lu, and Stephen Smalley all were key contributers to both
+    James Morris, Jarrett Lu, and Stephen Smalley all were key contributors to both
     early versions of this document and to many conference calls.
   </t>
 
@@ -22,6 +22,11 @@
 
   <t>
     Trond Myklebust provided use cases for secure diskless NFS clients.
+  </t>
+
+  <t>
+    Both Nico Williams and Bryce Nordgren challenged assumptions during the
+    review processes.
   </t>
 </section>
 

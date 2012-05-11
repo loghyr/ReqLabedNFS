@@ -4,8 +4,8 @@
 YEAR=`date +%Y`
 MONTH=`date +%B`
 DAY=`date +%d`
-PREVVERS=00
-VERS=01
+PREVVERS=01
+VERS=02
 BASEDOC=draft-ietf-nfsv4-labreqs
 
 autogen/%.xml : %.x
@@ -92,6 +92,7 @@ IDXMLSRC_BASE = \
 	labreqs_middle_introduction.xml \
 	labreqs_middle_requirements.xml \
 	labreqs_middle_usecases.xml \
+	labreqs_middle_security.xml \
 	labreqs_iana_considerations.xml \
 	labreqs_middle_end.xml \
 	labreqs_back_front.xml \
