@@ -326,7 +326,7 @@
       MAC-Functional.
     </t>
 
-    <section anchor='req:enforce:client' title='Client'>
+    <section anchor='req:enforce:client' title='Client Enforcement'>
       <t>
         The client MUST apply its own policy to remotely located objects, using
         security labels for the objects obtained from the server.  It MUST be
@@ -336,12 +336,10 @@
       </t>
 
       <t>
-        A mechanism MUST exist to allow the client to obtain access, and labeling
-        decisions from the server for locally cached and delegated objects, so
-        that it may apply the server's policy to these objects.  If the server's
-        policy changes, the client MUST flush all object state back to the
-        server.  The server MUST ensure that any flushed state received is
-        consistent with current policy before committing it to stable storage.
+        If the server's policy changes, the client MUST flush all object state
+        back to the server.  The server MUST ensure that any flushed state
+        received is consistent with current policy before committing it
+        to stable storage.
       </t>
 
       <t>
@@ -349,9 +347,17 @@
         MUST also be flushed back to the server when any other state of the
         objects is required to be flushed back.
       </t>
+
+      <t>
+        The implication here is that if the client holds
+        a delegation on an object, then it enforces policy to local changes
+        based on the object label it got from the server. When it tries
+        to commit those changes to the server, it SHOULD be prepared for the
+        server to reject those changes based on the policies of the server.
+      </t>
     </section>
 
-    <section anchor='req:enforce:server' title='Server'>
+    <section anchor='req:enforce:server' title='Server Enforcement'>
       <t>
         A MAC-Functional server MUST enforce its security policy over all exported
         objects, for operations which originate both locally and remotely.

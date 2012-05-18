@@ -10,10 +10,9 @@
       of being MAC-Functional. It does not however dictate in any manner whether
       assumptions can be made about other entities in the relationship. For
       example, it does not define whether a MAC-Functional client
-      can demand
-      that a MAC-Aware server only accept requests from other MAC-Functional
-      clients. That is a policy based in a MAC model and this document
-      does not impose policies on systems.
+      can demand that a MAC-Aware server only accept requests from
+      other MAC-Functional clients. That is a policy based in a MAC model
+      and this document does not impose policies on systems.
     </t>
 
     <t>
