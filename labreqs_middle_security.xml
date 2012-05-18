@@ -1,0 +1,43 @@
+<!-- Copyright (C) The IETF Trust (2012) -->
+<!-- Copyright (C) The Internet Society (2012) -->
+
+<section anchor="sec:security" title="Security Considerations">
+  <section anchor="sec:sec:guest" title="Guest Modes">
+    <t>
+      When either the client or server is operating in guest mode it is important to
+      realize that one side is not enforcing MAC protections. Alternate methods are
+      being used to handle the lack of MAC support and care should be taken to
+      identify and mitigate threats from possible tampering outside of these methods.
+    </t>
+  </section>
+
+  <section anchor="sec:sec:client" title="MAC-Functional Client Configuration">
+    <t>
+      We defined a MAC model as a access control decision made on a system which
+      normal users do not have the ability to override policies (see <xref target="sec:intro" />).
+      If the process labels are created solely on the client, then if a malicious
+      user has sufficient access on that client, the LNFS model is compromised. Note
+      that this is no different from:
+
+      <list style='symbols'>
+        <t>
+          current implementations in which the server uses policies to effectively determine
+          the object label for requests from the client, or
+        </t>
+
+        <t>
+          local decisions made on the client by the MAC security system.
+        </t>
+      </list>
+
+      The server must either explicitly trust the client (as in <xref target="SENFSV3" />)
+      or the MAC model should enforce that users cannot override policies, perhaps
+      via a externally managed source.
+    </t>
+
+    <t>
+      Once the labels leave the client, they can be protected by the transport mechanism
+      as described in <xref target="req:secserv" />.
+    </t>
+  </section>
+</section>
