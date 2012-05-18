@@ -2,6 +2,29 @@
 <!-- Copyright (C) The Internet Society (2012) -->
 
 <section anchor="sec:security" title="Security Considerations">
+  <section anchor="ss:sec:mac" title="Trust Needed for a Community">
+    <t>
+      Labeled NFS is a transport mechanism for labels, a storage requirement for
+      labels, and a definition of how to interpret labels. It defines the
+      responsibilities of the client and the server in the various permutations
+      of being MAC-Functional. It does not however dictate in any manner whether
+      assumptions can be made about other entities in the relationship. For
+      example, it does not define whether a MAC-Functional client
+      can demand
+      that a MAC-Aware server only accept requests from other MAC-Functional
+      clients. That is a policy based in a MAC model and this document
+      does not impose policies on systems.
+    </t>
+
+    <t>
+      As the requirement is a policy, it can be met with the use of a MAC model.
+      Let L be a LFS which implements the Limited Server mode, i.e., a
+      MAC-Aware server connected to MAC-Functional clients. Then a new LFS
+      L' can be created which has the additional policy that the MAC-Aware
+      server MUST not accept any requests from a non-MAC-Functional client.
+    </t>
+  </section>
+
   <section anchor="sec:sec:guest" title="Guest Modes">
     <t>
       When either the client or server is operating in guest mode it is important to

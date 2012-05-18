@@ -219,7 +219,7 @@
     <section anchor='req:opmodes:limited' title='Limited Server Mode'>
       <t>
         The server is MAC-Aware and the clients are MAC-Functional. The server can
-        store and transmit labels. It cannot enforce labels. The server SHOULD
+        store and transmit labels. It cannot enforce labels. The server MUST
         inform clients when an object label changes for a file the client
         has open.
       </t>
@@ -317,23 +317,16 @@
   </section>
 
   <section anchor='req:enforce' title='Policy Enforcement'>
-    <section anchor='req:enforce:full' title='Full Mode'>
-      <t>
-        The server MUST enforce its security policy over all exported
-        objects, for operations which originate both locally and remotely.
-      </t>
-      <t>
-        Requests from authenticated clients MUST be processed using security
-        labels and credentials supplied by the client as if they originated
-        locally.
-      </t>
-      <t>
-        As with labeling, the system MUST also take into account any other
-        volatile client security state, such as a change in process security
-        context via dynamic transition.  Access decisions SHOULD also be made
-        based upon the current client security label accessing the object,
-        rather than the security label which opened it, if different.
-      </t>
+    <t>
+      The MAC-Functional client determines if a process request is sent to
+      the remote server. Upon a successful response from the server, it must
+      use its own policies on the object's security labels to determine
+      if the process can be given access. The client SHOULD not need to
+      be cognizant if the server is either a Limited Server or fully
+      MAC-Functional.
+    </t>
+
+    <section anchor='req:enforce:client' title='Client'>
       <t>
         The client MUST apply its own policy to remotely located objects, using
         security labels for the objects obtained from the server.  It MUST be
@@ -341,10 +334,7 @@
         state regarding remote labels before re-validating that state with the
         server.
       </t>
-      <t>
-        The server MUST recall delegation of an object if the object's security
-        label changes.
-      </t>
+
       <t>
         A mechanism MUST exist to allow the client to obtain access, and labeling
         decisions from the server for locally cached and delegated objects, so
@@ -353,6 +343,7 @@
         server.  The server MUST ensure that any flushed state received is
         consistent with current policy before committing it to stable storage.
       </t>
+
       <t>
         Any local security state associated with cached or delegated objects
         MUST also be flushed back to the server when any other state of the
@@ -360,13 +351,29 @@
       </t>
     </section>
 
-    <section anchor='req:enforce:guest' title='Guest Mode'>
+    <section anchor='req:enforce:server' title='Server'>
       <t>
-        If the server is MAC-Functional and the client is not, the server MUST not
-        accept security labels provided by the client, and only enforce its
-        policy to exported objects. In the event that
-        the client is MAC-Functional while the server is not then the client may
-        deny access or fall back on other methods for providing security labeling.
+        A MAC-Functional server MUST enforce its security policy over all exported
+        objects, for operations which originate both locally and remotely.
+      </t>
+
+      <t>
+        Requests from authenticated clients MUST be processed using security
+        labels and credentials supplied by the client as if they originated
+        locally.
+      </t>
+
+      <t>
+        As with labeling, the system MUST also take into account any other
+        volatile client security state, such as a change in process security
+        context via dynamic transition.  Access decisions SHOULD also be made
+        based upon the current client security label accessing the object,
+        rather than the security label which opened it, if different.
+      </t>
+
+      <t>
+        The server SHOULD recall delegation of an object if the object's security
+        label changes.
       </t>
     </section>
   </section>
