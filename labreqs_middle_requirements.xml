@@ -9,18 +9,18 @@
 
   <section anchor='req:portinter' title='Portability & Interoperability'>
     <t>
-      LNFS MUST be designed with portability in mind, to
+      Labeled NFS MUST be designed with portability in mind, to
       facilitate implementations on any operating system that supports mandatory
       access controls.
     </t>
 
     <t>
-      LNFS MUST be designed and developed to facilitate interoperability between
-      different LNFS implementations.
+      Labeled NFS MUST be designed and developed to facilitate interoperability between
+      different Labeled NFS implementations.
     </t>
 
     <t>
-      LNFS modifications to standard NFSv4.2 <xref target="ref:nfsv4.2" />
+      Labeled NFS modifications to standard NFSv4.2 <xref target="ref:nfsv4.2" />
       implementations MUST not adversely
       impact any existing interoperability of those implementations.
     </t>
@@ -28,26 +28,26 @@
 
   <section anchor='req:perfscale' title='Performance & Scalability'>
     <t>
-      Security mechanisms often impact on system performance.  LNFS SHOULD
+      Security mechanisms often impact on system performance.  Labeled NFS SHOULD
       be designed and implemented in a way which avoids significant performance
       impact where possible.
     </t>
     <t>
-      As NFSv4.2 is designed for large-scale distributed networking, LNFS
+      As NFSv4.2 is designed for large-scale distributed networking, Labeled NFS
       SHOULD also be capable of scaling in a similar manner to underlying
       implementations where possible.
     </t>
     <t>
-      LNFS SHOULD respond in a robust manner to system and network
+      Labeled NFS SHOULD respond in a robust manner to system and network
       outages associated with typical enterprise and Internet environments.  At the
-      very least, LNFS SHOULD always operate in a fail-safe manner, so that service
+      very least, Labeled NFS SHOULD always operate in a fail-safe manner, so that service
       disruptions do not cause or facilitate security vulnerabilities.
     </t>
   </section>
 
   <section anchor='req:secserv' title='Security Services'>
     <t>
-      LNFS SHOULD ensure that the following security services are provided for
+      Labeled NFS SHOULD ensure that the following security services are provided for
       all NFSv4.2 messaging. These services may be provided by lower layers even if NFS
       has to be aware of and leverage them:
 
@@ -77,7 +77,7 @@
     </t>
 
     <t>
-      LNFS SHOULD support authentication on a context granularity so
+      Labeled NFS SHOULD support authentication on a context granularity so
       that different contexts running on a client can use different
       cryptographic keys and facilities.
     </t>
@@ -104,7 +104,7 @@
     </t>
 
     <t>
-      LNFS MUST provide a means for servers and clients to identify their
+      Labeled NFS MUST provide a means for servers and clients to identify their
       LFS for the purposes of authorization, security service selection, and
       security label interpretation.
     </t>
@@ -141,7 +141,7 @@
     </t>
 
     <t>
-      LNFS SHOULD define an initial negotiation scheme
+      Labeled NFS SHOULD define an initial negotiation scheme
       with the primary aims of simplicity and completeness.  This is to
       facilitate practical deployment of systems without being
       weighed down by complex and over-generalized global schemes.  Future
@@ -151,7 +151,7 @@
 
   <section anchor='req:opmodes' title='Modes of Operation'>
     <t>
-      In a LNFS client and server interaction, we can describe three modes of
+      In a Labeled NFS client and server interaction, we can describe three modes of
       operation:
 
       <list style='numbers'>
@@ -182,7 +182,7 @@
     <section anchor='req:opmodes:full' title='Full Mode'>
       <t>
         The server and the client have mutually recognized MAC
-        functionality enabled, and full LNFS functionality is extended over the
+        functionality enabled, and full Labeled NFS functionality is extended over the
         network between both client and server.
       </t>
 
@@ -388,7 +388,7 @@
   <section anchor='req:upgrade' title='Upgrading Existing Server'>
     <t>
       Note that under the MAC model, all objects MUST have labels.
-      Therefore, if an existing server is upgraded to include LNFS support,
+      Therefore, if an existing server is upgraded to include Labeled NFS support,
       then it is the responsibility of the security system to
       define the behavior for existing objects.
     </t>

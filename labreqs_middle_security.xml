@@ -16,7 +16,7 @@
       We defined a MAC model as a access control decision made on a system which
       normal users do not have the ability to override policies (see <xref target="sec:intro" />).
       If the process labels are created solely on the client, then if a malicious
-      user has sufficient access on that client, the LNFS model is compromised. Note
+      user has sufficient access on that client, the Labeled NFS model is compromised. Note
       that this is no different from:
 
       <list style='symbols'>

@@ -119,7 +119,7 @@
       where nodes may be running a variety of operating systems with
       different security mechanisms and security policies.  It is desired
       that network file servers be simply capable of storing and retrieving
-      MAC security labels for clients which use such labels.  The LNFS
+      MAC security labels for clients which use such labels.  The Labeled NFS
       protocol would be implemented here solely to enable transport of
       MAC security labels across the network.  It should be noted that in
       such an environment, overall security cannot be as strongly enforced

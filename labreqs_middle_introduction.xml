@@ -100,7 +100,7 @@
       </t>
 
       <t hangText='MAC-Functional:'>
-        is a client or server which is LNFS enabled. Such a system can interpret labels and
+        is a client or server which is Labeled NFS enabled. Such a system can interpret labels and
         apply policies based on the security system.
       </t>
 
