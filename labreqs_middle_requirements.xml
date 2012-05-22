@@ -51,11 +51,13 @@
       all NFSv4.2 messaging. These services may be provided by lower layers even if NFS
       has to be aware of and leverage them:
 
+<?rfc subcompact="yes" ?>
       <list style="symbols">
         <t>Authentication</t>
         <t>Integrity</t>
         <t>Privacy</t>
       </list>
+<?rfc subcompact="no" ?>
     </t>
 
     <t>
@@ -154,6 +156,7 @@
       In a Labeled NFS client and server interaction, we can describe three modes of
       operation:
 
+<?rfc subcompact="yes" ?>
       <list style='numbers'>
         <t>
           Full
@@ -167,6 +170,7 @@
           Guest
         </t>
       </list>
+<?rfc subcompact="no" ?>
 
       These modes arise from the level of MAC functionality in the clients and
       servers.  The clients can be non-MAC-Functional and MAC-Functional. 
