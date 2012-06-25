@@ -7,6 +7,7 @@ DAY=`date +%d`
 PREVVERS=03
 VERS=04
 BASEDOC=draft-ietf-nfsv4-labreqs
+XML2RFC=xml2rfc.tcl
 
 autogen/%.xml : %.x
 	@mkdir -p autogen
@@ -58,17 +59,17 @@ pall:
 
 $(BASEDOC)-$(VERS).txt: $(BASEDOC)-$(VERS).xml
 	rm -f $@ draft-tmp.txt
-	sh xml2rfc_wrapper.sh $(BASEDOC)-$(VERS).xml draft-tmp.txt
+	${XML2RFC}  $(BASEDOC)-$(VERS).xml draft-tmp.txt
 	mv draft-tmp.txt $@
 
 $(BASEDOC)-$(VERS).html: $(BASEDOC)-$(VERS).xml
 	rm -f $@ draft-tmp.html
-	sh xml2rfc_wrapper.sh $(BASEDOC)-$(VERS).xml draft-tmp.html
+	${XML2RFC}  $(BASEDOC)-$(VERS).xml draft-tmp.html
 	mv draft-tmp.html $@
 
 $(BASEDOC)-$(VERS).nr: $(BASEDOC)-$(VERS).xml
 	rm -f $@ draft-tmp.nr
-	sh xml2rfc_wrapper.sh $(BASEDOC)-$(VERS).xml $@.tmp
+	${XML2RFC}  $(BASEDOC)-$(VERS).xml $@.tmp
 	mv draft-tmp.nr $@
 
 labreqs_front_autogen.xml: labreqs_front.xml Makefile
