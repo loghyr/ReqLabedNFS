@@ -60,6 +60,14 @@
       </t>
     </list>
   </t>
+
+  <t>
+    Besides describing the requirements, this document records some
+    of the WG discussion on the functional requirements for the client.
+    The protocol is a vehicle for extending the security model already
+    present on the client and this document may help those outside the
+    NFS community understand the issues.
+  </t>
 </section>
 
 <section anchor='sec:defs' title='Definitions'>

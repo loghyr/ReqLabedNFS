@@ -94,7 +94,6 @@ IDXMLSRC_BASE = \
 	labreqs_middle_requirements.xml \
 	labreqs_middle_usecases.xml \
 	labreqs_middle_security.xml \
-	labreqs_iana_considerations.xml \
 	labreqs_middle_end.xml \
 	labreqs_back_front.xml \
 	labreqs_back_references.xml \
