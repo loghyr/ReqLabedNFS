@@ -3,7 +3,7 @@
 
   <references title="Normative References">
 
-    <reference anchor='ref:RFC2119'>
+    <reference anchor='RFC2119'>
       <front>
 	<title abbrev='RFC Key Words'>Key words for use in RFCs to Indicate Requirement Levels</title>
 	<author initials='S.' surname='Bradner' fullname='Scott Bradner'>
@@ -19,7 +19,11 @@
       </front>
     </reference>
 
-    <reference anchor="ref:rpcsecgssv3">
+</references>
+
+<references title="Informative References">
+
+    <reference anchor="rpcsecgssv3">
       <front>
         <title>Remote Procedure Call (RPC) Security Version 3</title>
         <author initials="T." surname="Haynes" />
@@ -29,7 +33,7 @@
       <seriesInfo name="draft-williams-rpcsecgssv3" value="(work in progress)"/>
     </reference>
 
-    <reference anchor="ref:lfsreg">
+    <reference anchor="lfsreg">
       <front>
         <title>Registry Specification for MAC Security Label Formats</title>
         <author initials="D." surname="Quigley" />
@@ -39,7 +43,7 @@
       <seriesInfo name="draft-quigley-label-format-registry" value="(work in progress)"/>
     </reference>
 
-    <reference anchor='ref:nfsv4.2'>
+    <reference anchor='I-D.ietf-nfsv4-minorversion2'>
       <front>
         <title>NFS Version 4 Minor Version 2</title>
 
@@ -47,16 +51,12 @@
           <organization abbrev='NetApp' />
         </author>
 
-        <date month='March' year='2011' />
+        <date month='March' year='2013' />
       </front>
-      <seriesInfo name="draft-ietf-nfsv4-minorversion2-08" value="(Work In Progress)"/>
+      <seriesInfo name="draft-ietf-nfsv4-minorversion2-19" value="(Work In Progress)"/>
     </reference>
 
-</references>
-
-<references title="Informative References">
-
-  <reference anchor='ref:rh_mls'>
+  <reference anchor='RH_MLS'>
     <front>
       <title>
         Section 46.6. Multi-Level Security (MLS) of Deployment Guide:

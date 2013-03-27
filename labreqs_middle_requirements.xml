@@ -20,7 +20,7 @@
     </t>
 
     <t>
-      Labeled NFS modifications to standard NFSv4.2 <xref target="ref:nfsv4.2" />
+      Labeled NFS modifications to standard NFSv4.2 <xref target="I-D.ietf-nfsv4-minorversion2" />
       implementations MUST not adversely
       impact any existing interoperability of those implementations.
     </t>

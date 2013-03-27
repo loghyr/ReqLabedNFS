@@ -158,7 +158,7 @@
     <t>
       In setups of this type, a lot of the policy targets (such as
       sockets or privileged system calls) are entirely local to the
-      client. The use of RPCSEC_GSSv3 (<xref target="ref:rpcsecgssv3" />)  for enforcing compliance at
+      client. The use of RPCSEC_GSSv3 (<xref target="rpcsecgssv3" />)  for enforcing compliance at
       the server level is therefore of limited value. The ability
       to permanently label files and have those labels read back
       by the client is, however, crucial to the ability to enforce
