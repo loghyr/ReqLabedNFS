@@ -239,7 +239,7 @@
         In these scenarios, the server is either non-MAC-Aware or MAC-Aware.
         The actions of the client will depend whether it is configured to
         treat the MAC-Aware server in the same manner as the non-MAC-Aware one.
-        I.e., does it utilize the approach presented in <xref target="req:opmodes:guest" />
+        I.e., does it utilize the approach presented in <xref target="modes:guest" />
         or does it allow the MAC-Aware server to return labels?
       </t>
 

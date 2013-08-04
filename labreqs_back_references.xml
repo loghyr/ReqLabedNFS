@@ -47,9 +47,8 @@
       <front>
         <title>NFS Version 4 Minor Version 2</title>
 
-        <author initials='T' surname='Haynes' fullname='Thomas Haynes'>
-          <organization abbrev='NetApp' />
-        </author>
+        <author initials='T' surname='Haynes' fullname='Thomas Haynes' />
+        <author initials='D' surname='Noveck' fullname='David Noveck' />
 
         <date month='March' year='2013' />
       </front>

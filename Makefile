@@ -92,6 +92,7 @@ IDXMLSRC_BASE = \
 	labreqs_middle_start.xml \
 	labreqs_middle_introduction.xml \
 	labreqs_middle_requirements.xml \
+	labreqs_middle_modes.xml \
 	labreqs_middle_usecases.xml \
 	labreqs_middle_security.xml \
 	labreqs_middle_end.xml \

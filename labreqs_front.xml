@@ -1,5 +1,5 @@
-<!-- Copyright (C) The IETF Trust (2012) -->
-<!-- Copyright (C) The Internet Society (2012) -->
+<!-- Copyright (C) The IETF Trust (2013) -->
+<!-- Copyright (C) The Internet Society (2013) -->
 
 <front>
     <title abbrev="ReqLabledNFS">
@@ -8,8 +8,7 @@
 
     <author fullname="Thomas Haynes"
             initials="T."
-            surname="Haynes"
-						role='editor'>
+            surname="Haynes">
       <organization abbrev="NetApp">NetApp</organization>
       <address>
         <postal>
@@ -31,7 +30,7 @@
 
     <abstract>
       <t>
-        This Internet-Draft outlines high-level requirements for the
+        This memo outlines high-level requirements for the
         integration of flexible Mandatory Access Control (MAC) functionality
         into the Network File System (NFS) version 4.2 (NFSv4.2).  It
         describes the level of protections that should be provided over
@@ -40,15 +39,4 @@
         changes, but to describe the environment in which they reside.
       </t>
     </abstract>
-
-    <note title="Requirements Language">
-      <t>
-        The key words &quot;MUST&quot;, &quot;MUST NOT&quot;,
-        &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;,
-        &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;,
-        &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be
-        interpreted as described in <xref target="RFC2119" />.
-      </t>
-    </note>
-
 </front>

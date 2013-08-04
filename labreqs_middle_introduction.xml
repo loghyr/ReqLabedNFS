@@ -4,8 +4,8 @@
 <section anchor="sec:intro" title="Introduction">
   <t>
     Mandatory Access Control (MAC) systems have been mainstreamed in
-    modern operating systems such as Linux (R), FreeBSD (R), and Solaris
-    (TM).  MAC systems bind security attributes to
+    modern operating systems such as Linux, FreeBSD, and Solaris.
+    MAC systems bind security attributes to
     subjects (processes) and objects within a system.  These attributes
     are used with other information in the system to make access control
     decisions.
@@ -30,43 +30,10 @@
   </t>
 
   <t>
-    People desire to use NFSv4 with these systems.  A mechanism is
-    required to provide security attribute information to NFSv4 clients
-    and servers.  This mechanism has the following requirements:
-  </t>
-
-  <t>
-    <list style='format (%d)'>
-      <t>
-        Clients MUST be able to convey to the server the security
-        attribute of the subject making the access request.  The server
-        may provide a mechanism to enforce MAC policy based on the
-        requesting subject's security attribute.
-      </t>
-
-      <t>
-        Servers MUST be able to store and retrieve the security attribute
-        of exported files as requested by the client.
-      </t>
-
-      <t>
-        Servers MUST provide a mechanism for notifying clients of attribute
-        changes of files on the server.
-      </t>
-
-      <t>
-        Clients and Servers MUST be able to negotiate Label Formats
-        and provide a mechanism to translate between them as needed.
-      </t>
-    </list>
-  </t>
-
-  <t>
-    Besides describing the requirements, this document records some
-    of the WG discussion on the functional requirements for the client.
-    The protocol is a vehicle for extending the security model already
-    present on the client and this document may help those outside the
-    NFS community understand the issues.
+    Besides describing the requirements, this document records the
+    functional requirements for the client imposed by the pre-existing
+    security models on the client. This document may help those outside the
+    NFS community understand those issues.
   </t>
 </section>
 
@@ -119,4 +86,14 @@
       </t>
     </list>
   </t>
+
+  <section title="Requirements Language">
+    <t>
+      The key words &quot;MUST&quot;, &quot;MUST NOT&quot;,
+      &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;,
+      &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;,
+      &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be
+      interpreted as described in <xref target="RFC2119" />.
+    </t>
+  </section>
 </section>

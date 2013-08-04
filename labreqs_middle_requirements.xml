@@ -1,3 +1,6 @@
+<!-- Copyright (C) The IETF Trust (2012-2013) -->
+<!-- Copyright (C) The Internet Society (2012-2013) -->
+
 <section anchor='req' title='Requirements'>
 
   <t>
@@ -7,47 +10,43 @@
     <xref target='SENFSV3' />.
   </t>
 
-  <section anchor='req:portinter' title='Portability & Interoperability'>
+  <section anchor='req:general' title='General'>
     <t>
-      Labeled NFS MUST be designed with portability in mind, to
-      facilitate implementations on any operating system that supports mandatory
-      access controls.
+      A mechanism is
+      required to provide security attribute information to NFSv4 clients
+      and servers.  This mechanism has the following requirements:
     </t>
 
     <t>
-      Labeled NFS MUST be designed and developed to facilitate interoperability between
-      different Labeled NFS implementations.
-    </t>
+      <list style='format (%d)'>
+        <t>
+          Clients MUST be able to convey to the server the security
+          attribute of the subject making the access request.  The server
+          may provide a mechanism to enforce MAC policy based on the
+          requesting subject's security attribute.
+        </t>
 
-    <t>
-      Labeled NFS modifications to standard NFSv4.2 <xref target="I-D.ietf-nfsv4-minorversion2" />
-      implementations MUST not adversely
-      impact any existing interoperability of those implementations.
-    </t>
-  </section>
+        <t>
+          Servers MUST be able to store and retrieve the security attribute
+          of exported files as requested by the client.
+        </t>
 
-  <section anchor='req:perfscale' title='Performance & Scalability'>
-    <t>
-      Security mechanisms often impact on system performance.  Labeled NFS SHOULD
-      be designed and implemented in a way which avoids significant performance
-      impact where possible.
-    </t>
-    <t>
-      As NFSv4.2 is designed for large-scale distributed networking, Labeled NFS
-      SHOULD also be capable of scaling in a similar manner to underlying
-      implementations where possible.
-    </t>
-    <t>
-      Labeled NFS SHOULD respond in a robust manner to system and network
-      outages associated with typical enterprise and Internet environments.  At the
-      very least, Labeled NFS SHOULD always operate in a fail-safe manner, so that service
-      disruptions do not cause or facilitate security vulnerabilities.
+        <t>
+          Servers MUST provide a mechanism for notifying clients of attribute
+          changes of files on the server.
+        </t>
+
+        <t>
+          Clients and Servers MUST be able to negotiate Label Formats
+          and provide a mechanism to translate between them as needed.
+        </t>
+      </list>
     </t>
   </section>
 
   <section anchor='req:secserv' title='Security Services'>
     <t>
-      Labeled NFS SHOULD ensure that the following security services are provided for
+      Labeled NFS SHOULD support that the following security services are provided for
       all NFSv4.2 messaging. These services may be provided by lower layers even if NFS
       has to be aware of and leverage them:
 
@@ -68,7 +67,7 @@
 
     <t>
       Strong mutual authentication will be required between the server and
-      the client for Full Mode operation <xref target='req:opmodes:full' />.
+      the client for Full Mode operation <xref target='modes:full' />.
     </t>
 
     <t>
@@ -106,15 +105,28 @@
     </t>
 
     <t>
+      Labeled NFS SHOULD define an initial negotiation scheme
+      with the primary aims of simplicity and completeness.  This is to
+      facilitate practical deployment of systems without being
+      weighed down by complex and over-generalized global schemes.  Future
+      extensibility SHOULD also be taken into consideration.
+    </t>
+
+    <t>
       Labeled NFS MUST provide a means for servers and clients to identify their
       LFS for the purposes of authorization, security service selection, and
       security label interpretation.
     </t>
 
     <t>
+      Labeled NFS MUST provide a means for servers and clients to identify their
+      mode of operation (see <xref target='modes' />).
+    </t>
+
+    <t>
       A negotiation scheme SHOULD be provided, allowing systems from
       different label formats to agree on how they will interpret or
-      translate each others labels.  Multiple concurrent agreements may be
+      translate each others foreign labels.  Multiple concurrent agreements may be
       current between a server and a client.
     </t>
 
@@ -124,7 +136,7 @@
     </t>
 
     <t>
-      If the LFS supported on a system changes, it SHOULD renegotiate agreements to
+      If the LFS supported on a system changes, the system SHOULD renegotiate agreements to
       reflect these changes.
     </t>
 
@@ -141,133 +153,6 @@
       negotiate a new, concurrent agreement with the client, acting on behalf of
       the externally located source of the files.
     </t>
-
-    <t>
-      Labeled NFS SHOULD define an initial negotiation scheme
-      with the primary aims of simplicity and completeness.  This is to
-      facilitate practical deployment of systems without being
-      weighed down by complex and over-generalized global schemes.  Future
-      extensibility SHOULD also be taken into consideration.
-    </t>
-  </section>
-
-  <section anchor='req:opmodes' title='Modes of Operation'>
-    <t>
-      In a Labeled NFS client and server interaction, we can describe three modes of
-      operation:
-
-<?rfc subcompact="yes" ?>
-      <list style='numbers'>
-        <t>
-          Full
-        </t>
-
-        <t>
-          Limited Server
-        </t>
-
-        <t>
-          Guest
-        </t>
-      </list>
-<?rfc subcompact="no" ?>
-
-      These modes arise from the level of MAC functionality in the clients and
-      servers.  The clients can be non-MAC-Functional and MAC-Functional. 
-      The servers can be non-MAC-Functional, MAC-Aware, and MAC-Functional.
-    </t>
-
-    <t>
-      A MAC-Functional client MUST be able to determine the level of MAC
-      functionality in the server.  Likewise, a MAC-Functional server MUST
-      be able to determine whether or not a client is MAC-Functional.
-    </t>
-
-    <section anchor='req:opmodes:full' title='Full Mode'>
-      <t>
-        The server and the client have mutually recognized MAC
-        functionality enabled, and full Labeled NFS functionality is extended over the
-        network between both client and server.
-      </t>
-
-      <t>
-        An example of an operation in full mode is as follows. On the initial lookup,
-        the client requests access to an object on the server. It sends its process
-        security context over to the server. The server checks all relevant
-        policies to determine if that process context from that client is allowed to
-        access the resource. Once this has succeeded the object with its associated
-        security information is released to the client. Once the client receives the
-        object it determines if its policies allow the process running on the
-        client access to the object.
-      </t>
-
-      <t>
-        On subsequent operations where the client already has a handle for the file,
-        the order of enforcement is reversed. Since the client already has the security
-        context it may make an access decision against its policy first. This
-        enables the client to avoid sending requests to the server that it knows will
-        fail regardless of the server's policy. If the client passes its policy
-        checks then it sends the request to the server where the client's process
-        context is used to determine if the server will release that resource to the
-        client. If both checks pass, the client is given the resource and everything
-        succeeds.
-      </t>
-
-      <t>
-        In the event that the client does not trust the server, it may opt to use an
-        alternate labeling mechanism regardless of the server's ability to return
-        security information.
-      </t>
-    </section>
-
-    <section anchor='req:opmodes:limited' title='Limited Server Mode'>
-      <t>
-        The server is MAC-Aware and the clients are MAC-Functional. The server can
-        store and transmit labels. It cannot enforce labels. The server MUST
-        inform clients when an object label changes for a file the client
-        has open.
-      </t>
-      <t>
-        In this mode, the server may not be aware of the format of any its
-        object labels. Indeed, it may service several different security models
-        at the same time. A client MUST process foreign labels as discussed
-        in <xref target="req:encdoi" />. As with the Guest Mode, this mode's
-        level of trust can be degraded if non-MAC-functional clients have
-        access to the server.
-      </t>
-    </section>
-
-    <section anchor='req:opmodes:guest' title='Guest Mode'>
-      <t>
-        Only one of the server or client is MAC-Functional enabled.
-      </t>
-
-      <t>
-        In the case of the server only being MAC-Functional, the server
-        enforces its policy, and may selectively provide standard NFS
-        services to clients based on their authentication credentials and/or
-        associated network attributes (e.g., IP address, network interface)
-        according to security policy.  The level of trust and access extended
-        to a client in this mode is configuration-specific.
-      </t>
-
-      <t>
-        In the case of the client only being MAC-Functional, the
-        client MUST operate as a standard NFSv4.2 client, and SHOULD selectively
-        provide processes access to servers based upon the security
-        attributes of the local process, and network attributes of the server,
-        according to policy.  The client may also override default labeling of
-        the remote file system based upon these security attributes, or other labeling
-        methods such as mount point labeling.
-      </t>
-
-      <t>
-        In other words, Guest Mode is standard NFSv4.2 over the wire, with the MAC-Functional
-        system mapping the non-MAC-Functional system's processes or objects to security
-        labels based on other characteristics in order to preserve its MAC
-        guarantees.
-      </t>
-    </section>
   </section>
 
   <section anchor='req:labeling' title='Labeling'>
@@ -313,9 +198,9 @@
         The server MUST honor the ability for a client to specify the label of an
         object on creation.  If the server is MAC enabled it may choose to reject the
         label specified by the client due to restrictions in the server policy.
-        The server SHOULD not attempt to find a suitable label for an object in event
+        The server SHOULD NOT attempt to find a suitable label for an object in event
         of different labeling rules on its end.  The server is allowed to translate
-        the label but SHOULD not change the semantic meaning of the label.
+        the label but SHOULD NOT change the semantic meaning of the label.
       </t>
     </section>
   </section>
@@ -325,7 +210,7 @@
       The MAC-Functional client determines if a process request is sent to
       the remote server. Upon a successful response from the server, it must
       use its own policies on the object's security labels to determine
-      if the process can be given access. The client SHOULD not need to
+      if the process can be given access. The client SHOULD NOT need to
       be cognizant if the server is either a Limited Server or fully
       MAC-Functional.
     </t>

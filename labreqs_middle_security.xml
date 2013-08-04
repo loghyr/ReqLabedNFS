@@ -20,7 +20,7 @@
       Let L be a LFS which implements the Limited Server mode, i.e., a
       MAC-Aware server connected to MAC-Functional clients. Then a new LFS
       L' can be created which has the additional policy that the MAC-Aware
-      server MUST not accept any requests from a non-MAC-Functional client.
+      server MUST NOT accept any requests from a non-MAC-Functional client.
     </t>
   </section>
 

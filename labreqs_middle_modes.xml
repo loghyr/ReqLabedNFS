@@ -1,0 +1,124 @@
+<!-- Copyright (C) The IETF Trust (2012-2013) -->
+<!-- Copyright (C) The Internet Society (2012-2013) -->
+
+<section anchor='modes' title='Modes of Operation'>
+  <t>
+    In a Labeled NFS client and server interaction, we can describe three modes of
+    operation:
+
+<?rfc subcompact="yes" ?>
+    <list style='numbers'>
+      <t>
+        Full
+      </t>
+
+      <t>
+        Limited Server
+      </t>
+
+      <t>
+        Guest
+      </t>
+    </list>
+<?rfc subcompact="no" ?>
+
+    These modes arise from the level of MAC functionality in the clients and
+    servers.  The clients can be non-MAC-Functional and MAC-Functional. 
+    The servers can be non-MAC-Functional, MAC-Aware, and MAC-Functional.
+  </t>
+
+  <t>
+    A MAC-Functional client MUST be able to determine the level of MAC
+    functionality in the server.  Likewise, a MAC-Functional server MUST
+    be able to determine whether or not a client is MAC-Functional. As
+    discussed in <xref target='req:encdoi' />, the protocol MUST provide
+    for the client and server to make those determinations.
+  </t>
+
+  <section anchor='modes:full' title='Full Mode'>
+    <t>
+      The server and the client have mutually recognized MAC
+      functionality enabled, and full Labeled NFS functionality is extended over the
+      network between both client and server.
+    </t>
+
+    <t>
+      An example of an operation in full mode is as follows. On the initial lookup,
+      the client requests access to an object on the server. It sends its process
+      security context over to the server. The server checks all relevant
+      policies to determine if that process context from that client is allowed to
+      access the resource. Once this has succeeded the object with its associated
+      security information is released to the client. Once the client receives the
+      object it determines if its policies allow the process running on the
+      client access to the object.
+    </t>
+
+    <t>
+      On subsequent operations where the client already has a handle for the file,
+      the order of enforcement is reversed. Since the client already has the security
+      context it may make an access decision against its policy first. This
+      enables the client to avoid sending requests to the server that it knows will
+      fail regardless of the server's policy. If the client passes its policy
+      checks then it sends the request to the server where the client's process
+      context is used to determine if the server will release that resource to the
+      client. If both checks pass, the client is given the resource and everything
+      succeeds.
+    </t>
+
+    <t>
+      In the event that the client does not trust the server, it may opt to use an
+      alternate labeling mechanism regardless of the server's ability to return
+      security information.
+    </t>
+  </section>
+
+  <section anchor='modes:limited' title='Limited Server Mode'>
+    <t>
+      The server is MAC-Aware and the clients are MAC-Functional. The server can
+      store and transmit labels. It cannot enforce labels. The server MUST
+      inform clients when an object label changes for a file the client
+      has open.
+    </t>
+    <t>
+      In this mode, the server may not be aware of the format of any its
+      object labels. Indeed, it may service several different security models
+      at the same time. A client MUST process foreign labels as discussed
+      in <xref target="req:encdoi" />. As with the Guest Mode, this mode's
+      level of trust can be degraded if non-MAC-functional clients have
+      access to the server.
+    </t>
+  </section>
+
+  <section anchor='modes:guest' title='Guest Mode'>
+    <t>
+      Only one of the server or client is MAC-Functional enabled.
+    </t>
+
+    <t>
+      In the case of the server only being MAC-Functional, the server
+      enforces its policy, and may selectively provide standard NFS
+      services to clients based on their authentication credentials and/or
+      associated network attributes (e.g., IP address, network interface)
+      according to security policy.  The level of trust and access extended
+      to a client in this mode is configuration-specific.
+    </t>
+
+    <t>
+      In the case of the client only being MAC-Functional, the
+      client MUST operate as a standard NFSv4.2
+      (see <xref target='I-D.ietf-nfsv4-minorversion2' />) client, and SHOULD selectively
+      provide processes access to servers based upon the security
+      attributes of the local process, and network attributes of the server,
+      according to policy.  The client may also override default labeling of
+      the remote file system based upon these security attributes, or other labeling
+      methods such as mount point labeling.
+    </t>
+
+    <t>
+      In other words, Guest Mode is standard NFSv4.2 over the wire, with the MAC-Functional
+      system mapping the non-MAC-Functional system's processes or objects to security
+      labels based on other characteristics in order to preserve its MAC
+      guarantees.
+    </t>
+  </section>
+</section>
