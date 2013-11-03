@@ -79,6 +79,7 @@ target='http://www.cs.utah.edu/flux/fluke/html/dtos/HTML/dtos.html'>
       National Security Agency
       </organization>
     </author>
+    <date month='December' year='2000' />
   </front>
 </reference>
 
@@ -100,6 +101,7 @@ target='http://www.cs.utah.edu/flux/fluke/html/dtos/HTML/dtos.html'>
           <email>jwcart2@tycho.nsa.gov</email>
         </address>
       </author>
+      <date />
     </front>
   </reference>
 

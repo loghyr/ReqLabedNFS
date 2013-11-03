@@ -7,7 +7,7 @@ DAY=`date +%d`
 PREVVERS=04
 VERS=05
 BASEDOC=draft-ietf-nfsv4-labreqs
-XML2RFC=xml2rfc.tcl
+XML2RFC=xml2rfc
 
 autogen/%.xml : %.x
 	@mkdir -p autogen
@@ -58,19 +58,13 @@ pall:
 	wait
 
 $(BASEDOC)-$(VERS).txt: $(BASEDOC)-$(VERS).xml
-	rm -f $@ draft-tmp.txt
-	${XML2RFC}  $(BASEDOC)-$(VERS).xml draft-tmp.txt
-	mv draft-tmp.txt $@
+	${XML2RFC} --text  $(BASEDOC)-$(VERS).xml -o $@
 
 $(BASEDOC)-$(VERS).html: $(BASEDOC)-$(VERS).xml
-	rm -f $@ draft-tmp.html
-	${XML2RFC}  $(BASEDOC)-$(VERS).xml draft-tmp.html
-	mv draft-tmp.html $@
+	${XML2RFC}  --html $(BASEDOC)-$(VERS).xml -o $@
 
 $(BASEDOC)-$(VERS).nr: $(BASEDOC)-$(VERS).xml
-	rm -f $@ draft-tmp.nr
-	${XML2RFC}  $(BASEDOC)-$(VERS).xml $@.tmp
-	mv draft-tmp.nr $@
+	${XML2RFC} --nroff $(BASEDOC)-$(VERS).xml -o $@
 
 labreqs_front_autogen.xml: labreqs_front.xml Makefile
 	sed -e s/DAYVAR/${DAY}/g -e s/MONTHVAR/${MONTH}/g -e s/YEARVAR/${YEAR}/g < labreqs_front.xml > labreqs_front_autogen.xml
@@ -105,11 +99,11 @@ IDCONTENTS = labreqs_front_autogen.xml $(IDXMLSRC_BASE)
 
 IDXMLSRC = labreqs_front.xml $(IDXMLSRC_BASE)
 
-draft-tmp.xml: $(START) Makefile $(END)
+draft-tmp.xml: $(START) Makefile $(END) $(IDCONTENTS)
 		rm -f $@ $@.tmp
 		cp $(START) $@.tmp
 		chmod +w $@.tmp
-		for i in $(IDCONTENTS) ; do echo '<?rfc include="'$$i'"?>' >> $@.tmp ; done
+		for i in $(IDCONTENTS) ; do cat $$i >> $@.tmp ; done
 		cat $(END) >> $@.tmp
 		mv $@.tmp $@
 
