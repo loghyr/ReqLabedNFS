@@ -3,7 +3,7 @@
 
 <section anchor="sec:intro" title="Introduction">
   <t>
-    Mandatory Access Control (MAC) systems have been mainstreamed in
+    Mandatory Access Control (MAC) (<xref target='RFC4949' />) systems have been mainstreamed in
     modern operating systems such as Linux, FreeBSD, and Solaris.
     MAC systems bind security attributes to
     subjects (processes) and objects within a system.  These attributes
@@ -22,9 +22,10 @@
     DAC systems users are free to specify the access rules for resources
     that they own.  MAC models base their security decisions on a system
     wide policy established by an administrator or organization which the
-    users do not have the ability to override.  DAC systems offer no real
-    protection against malicious or flawed software due to each program
-    running with the full permissions of the user executing it.
+    users do not have the ability to override.  DAC systems offers some
+    protection against unauthorized users running malicious software.
+    However, even an authorized user can execute malicious or flawed software
+    with those programs running with the full permissions of the user executing it.
     Inversely MAC models can confine malicious or flawed software and
     usually act at a finer granularity than their DAC counterparts.
   </t>
@@ -40,6 +41,11 @@
 <section anchor='sec:defs' title='Definitions'>
   <t>
     <list style='hanging'>
+      <t hangText='Foreign Label:'>
+        is when a MAC implementation encounters a label in a format other 
+        than it uses for encoding.
+      </t>
+
       <t hangText='Label Format Specifier (LFS):'>
         is an identifier used by the client to establish
         the syntactic format of the security label and the semantic meaning
@@ -50,24 +56,6 @@
         is the IANA registry (see <xref target="lfsreg" />) containing all registered
         LFS along with references to the documents that
         describe the syntactic format and semantics of the security label.
-      </t>
-
-      <t hangText='Policy Identifier (PI):'>
-        is an optional part of the definition of a Label
-        Format Specifier which allows for clients and server to identify
-        specific security policies.
-      </t>
-
-      <t hangText='Object:'>
-        is a passive resource within the system that we
-        wish to be protected.  Objects can be entities such as files,
-        directories, pipes, sockets, and many other system resources relevant
-        to the protection of the system state.
-      </t>
-
-      <t hangText='Subject:'>
-        is an active entity, usually a process, which is
-        requesting access to an object.
       </t>
 
       <t hangText='MAC-Aware:'>
@@ -83,6 +71,24 @@
         is a traditional model where objects are given a sensitivity
         level (Unclassified, Secret, Top Secret,  etc) and a category set
         <xref target='RH_MLS' />.
+      </t>
+
+      <t hangText='Object:'>
+        is a passive resource within the system that we
+        wish to be protected.  Objects can be entities such as files,
+        directories, pipes, sockets, and many other system resources relevant
+        to the protection of the system state.
+      </t>
+
+      <t hangText='Policy Identifier (PI):'>
+        is an optional part of the definition of a Label
+        Format Specifier which allows for clients and server to identify
+        specific security policies.
+      </t>
+
+      <t hangText='Subject:'>
+        is an active entity, usually a process, which is
+        requesting access to an object.
       </t>
     </list>
   </t>

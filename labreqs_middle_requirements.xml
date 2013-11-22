@@ -20,10 +20,10 @@
     <t>
       <list style='format (%d)'>
         <t>
-          Clients MUST be able to convey to the server the security
-          attribute of the subject making the access request.  The server
+          Clients MUST be able to convey to the server the client's
+          priveleges, i.e., the subject, for making the access request.  The server
           may provide a mechanism to enforce MAC policy based on the
-          requesting subject's security attribute.
+          requesting client's priveleges.
         </t>
 
         <t>
@@ -46,9 +46,9 @@
 
   <section anchor='req:secserv' title='Security Services'>
     <t>
-      Labeled NFS SHOULD support that the following security services are provided for
-      all NFSv4.2 messaging. These services may be provided by lower layers even if NFS
-      has to be aware of and leverage them:
+      Labeled NFS or the underlying system on which the Labeled NFS operates
+      MUST provide the following security services for all
+      NFSv4.2 messaging
 
 <?rfc subcompact="yes" ?>
       <list style="symbols">
@@ -66,14 +66,14 @@
     </t>
 
     <t>
-      Strong mutual authentication will be required between the server and
+      Strong mutual authentication is required between the server and
       the client for Full Mode operation <xref target='modes:full' />.
     </t>
 
     <t>
-      MAC security labels and any related security state SHOULD always be
+      MAC security labels and any related security state MUST always be
       protected by these security services when transferred over the network;
-      as SHOULD the binding of labels and state to associated objects and
+      as MUST the binding of labels and state to associated objects and
       subjects.
     </t>
 
@@ -89,19 +89,19 @@
       Encoding of MAC labels and attributes passed over the network MUST
       be specified in a complete and unambiguous manner while maintaining the
       flexibility of MAC implementations. To accomplish this the labels
-      MUST consist of an opaque component bound with a Label Format Specifier (LFS).
+      MUST consist of a format-specific component bound with a Label Format Specifier (LFS).
       The LFS component provides a mechanism for identifying the structure and semantics of the
       opaque component.  Meanwhile, the opaque component is the security label which will
       be interpreted by the MAC models.
     </t>
 
     <t>
-      MAC models base access decisions on security attributes bound to
-      subjects and objects. With a given MAC model, all systems have
+      MAC models base access decisions on security attributes priveleges bound to
+      subjects and objects, respectively. With a given MAC model, all systems have
       semantically coherent labeling - a security label MUST always
       mean exactly the same thing on every system. While this may not be
       necessary for simple MAC models it is recommended that most label formats
-      assigned an LFS incorporate this concept into their label format.
+      assigned an LFS incorporate semantically coherent labeling into their label format.
     </t>
 
     <t>
@@ -200,7 +200,7 @@
         label specified by the client due to restrictions in the server policy.
         The server SHOULD NOT attempt to find a suitable label for an object in event
         of different labeling rules on its end.  The server is allowed to translate
-        the label but SHOULD NOT change the semantic meaning of the label.
+        the label but MUST NOT change the semantic meaning of the label.
       </t>
     </section>
   </section>

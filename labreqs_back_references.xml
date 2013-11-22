@@ -23,6 +23,16 @@
 
 <references title="Informative References">
 
+    <reference anchor='RFC4949'>
+      <front>
+	<title>Internet Security Glossary, Version 2</title>
+	<author initials='R.' surname='Shirey' fullname='Robert Shirey'>
+	  <organization>Harvard University</organization>
+     	</author>
+     	<date year='2007' month='August' />
+      </front>
+    </reference>
+
     <reference anchor="rpcsecgssv3">
       <front>
         <title>Remote Procedure Call (RPC) Security Version 3</title>
@@ -48,11 +58,10 @@
         <title>NFS Version 4 Minor Version 2</title>
 
         <author initials='T' surname='Haynes' fullname='Thomas Haynes' />
-        <author initials='D' surname='Noveck' fullname='David Noveck' />
 
-        <date month='March' year='2013' />
+        <date month='August' year='2013' />
       </front>
-      <seriesInfo name="draft-ietf-nfsv4-minorversion2-19" value="(Work In Progress)"/>
+      <seriesInfo name="draft-ietf-nfsv4-minorversion2-20" value="(Work In Progress)"/>
     </reference>
 
   <reference anchor='RH_MLS'>
