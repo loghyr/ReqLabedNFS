@@ -4,8 +4,8 @@
 YEAR=`date +%Y`
 MONTH=`date +%B`
 DAY=`date +%d`
-PREVVERS=04
-VERS=05
+PREVVERS=05
+VERS=06
 BASEDOC=draft-ietf-nfsv4-labreqs
 XML2RFC=xml2rfc
 

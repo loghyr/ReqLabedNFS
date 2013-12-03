@@ -36,11 +36,11 @@
     <reference anchor="rpcsecgssv3">
       <front>
         <title>Remote Procedure Call (RPC) Security Version 3</title>
-        <author initials="T." surname="Haynes" />
+        <author initials="W." surname="Adamson" />
         <author initials="N." surname="Williams" />
-        <date year="2011" />
+        <date month='October' year='2013' />
       </front>
-      <seriesInfo name="draft-williams-rpcsecgssv3" value="(work in progress)"/>
+      <seriesInfo name="draft-ietf-nfsv4-rpcsec-gssv3-05" value="(Work In Progress)"/>
     </reference>
 
     <reference anchor="lfsreg">
@@ -59,9 +59,9 @@
 
         <author initials='T' surname='Haynes' fullname='Thomas Haynes' />
 
-        <date month='August' year='2013' />
+        <date month='November' year='2013' />
       </front>
-      <seriesInfo name="draft-ietf-nfsv4-minorversion2-20" value="(Work In Progress)"/>
+      <seriesInfo name="draft-ietf-nfsv4-minorversion2-21" value="(Work In Progress)"/>
     </reference>
 
   <reference anchor='RH_MLS'>
