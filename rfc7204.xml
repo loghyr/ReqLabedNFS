@@ -1,0 +1,1178 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+
+<?rfc toc="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes" ?>
+<?rfc compact="yes" ?>
+<?rfc subcompact="no" ?>
+<?rfc rfcedstyle="yes"?>
+
+<rfc 
+    category="info"
+    ipr="trust200902"
+    number="7204"
+    submissionType="IETF"
+    consensus="yes" >
+
+<front>
+    <title abbrev="ReqLabeledNFS">
+      Requirements for Labeled NFS
+    </title>
+
+    <author fullname="Thomas Haynes"
+            initials="T."
+            surname="Haynes">
+      <organization abbrev="NetApp">NetApp</organization>
+      <address>
+        <postal>
+          <street>495 East Java Dr.</street>
+          <city>Sunnyvale</city>
+          <region>CA</region>
+          <code>94089</code>
+          <country>USA</country>
+        </postal>
+        <phone>+1 408 215 1519</phone>
+        <email>tdh@excfb.com</email>
+      </address>
+    </author>
+
+    <date month="April" year="2014"/>
+
+    <area>Transport</area>
+    <workgroup>NFSv4</workgroup>
+    <keyword>NFSv4</keyword>
+
+<!-- [rfced] Please let us know if any changes are required for the
+following:
+
+[tdh] I have applied all of the neccessary change.
+
+a) We found instances of both "a LFS" and "an LFS" in the document.
+We chose to use "an LFS."  (Usage in past RFCs has been inconsistent.)
+Please let us know if you prefer otherwise.
+
+[tdh] I am fine with "an LFS".
+
+b) The following terms appear to be used inconsistently in
+the document.  Please let us know which form is preferred.
+
+file system / filesystem
+
+[tdh] RFC5661 uses "file system", so I'll go with that.
+
+label format / Label Format
+
+[tdh] Label Format
+
+full mode / Full Mode 
+
+[tdh] Full Mode
+
+guest mode / Guest Mode   (we also see "Limited Server mode")
+
+[tdh] Guest Mode
+
+c) Per published RFCs (including RFC 4949), we changed "a MLS" in
+this document to "an MLS."  Please let us know any objections.
+
+[tdh] I'm okay with this...
+
+ -->
+
+    <abstract>
+      <t>
+        This memo outlines high-level requirements for the
+        integration of flexible Mandatory Access Control (MAC) functionality
+        into the Network File System (NFS) version 4.2 (NFSv4.2).  It
+        describes the level of protections that should be provided over
+        protocol components and the basic structure of the
+        proposed system.  The intent here is not to present the protocol
+        changes but to describe the environment in which they reside.
+      </t>
+    </abstract>
+</front>
+
+<middle>
+
+<section anchor="sec:intro" title="Introduction">
+
+<!-- [rfced] Section 1: This manner of citing RFC 4949 seems odd. 
+Typically, this would seem to be a reference to a document about 
+Mandatory Access Control. If RFC 4949 is being cited for the 
+definition, perhaps the following works?
+
+Original:
+   Mandatory Access Control (MAC) ([RFC4949]) systems have been
+   mainstreamed in modern operating systems such as Linux, FreeBSD, and
+   Solaris.
+
+Perhaps:
+   Mandatory Access Control (MAC) systems (as defined in [RFC4949]) have
+   been mainstreamed in modern operating systems such as Linux, FreeBSD,
+   and Solaris.
+
+[tdh] took proposed form
+-->
+
+  <t>
+    Mandatory Access Control (MAC) systems (as defined in
+    <xref target='RFC4949' />) have been mainstreamed in modern
+    operating systems such as Linux, FreeBSD, and Solaris.  MAC
+    systems bind security attributes to subjects
+    (processes) and objects within a system.  These attributes are used
+    with other information in the system to make access control decisions.
+  </t>
+
+  <t>
+    Access control models such as Unix permissions or Access Control
+    Lists (ACLs) are commonly referred to as Discretionary Access Control (DAC)
+    models.  These systems base their access decisions on user identity
+    and resource ownership.  In contrast, MAC models base their access
+    control decisions on the label on the subject (usually a process) and
+    the object it wishes to access.  These labels may contain user
+    identity information but usually contain additional information.  In
+    DAC systems, users are free to specify the access rules for resources
+    that they own.  MAC models base their security decisions on a
+    system-wide policy established by an administrator or organization that
+    the users do not have the ability to override.  DAC systems offer some
+    protection against unauthorized users running malicious software.
+    However, even an authorized user can execute malicious or flawed software
+    with those programs running with the full permissions of the user executing
+    it.  Inversely, MAC models can confine malicious or flawed software and
+    usually act at a finer granularity than their DAC counterparts.
+  </t>
+
+  <t>
+    Besides describing the requirements, this document records the
+    functional requirements for the client imposed by the preexisting
+    security models on the client. This document may help those outside the
+    NFS community understand those issues.
+  </t>
+</section>
+
+<section anchor='sec:defs' title='Definitions'>
+  <t>
+    <list style='hanging'>
+      <t hangText='Foreign Label:'>
+        a label in a format other than the format that a MAC implementation
+        uses for encoding.
+      </t>
+
+      <t hangText='Label Format Specifier (LFS):'>
+        an identifier used by the client to establish
+        the syntactic format of the security label and the semantic meaning
+        of its components.
+      </t>
+
+<!-- [rfced] Section 2 mentions an IANA registry that was never created.
+That is, it seems that [LFSReg] (draft-quigley-label-format-registry) 
+was not approved and is currently Expired, so the action in its IANA 
+Considerations section was not completed. Consequently, how should this
+text be updated? 
+
+(We note that "Label Format Registry" is not mentioned in this document 
+after being defined, so please consider whether the definition could 
+simply be removed.)
+
+Current:
+   Label Format Registry:  the IANA registry (see [LFSReg]) containing
+      all registered LFSs, along with references to the documents that
+      describe the syntactic format and semantics of the security label.
+
+Perhaps:
+   Label Format Registry:  a proposed registry (see [LFSReg]) that would
+      contain a list of LFSs, along with references to the documents that
+      describe the syntactic format and semantics of the security label.
+
+[tdh] I've actually been thinking about this - I'll revive the document.
+In the meantime, the proposed form works.
+
+And actually, upon a re-read, it can go away from this document...
+
+      <t hangText='Label Format Registry:'>
+        a proposed registry (see <xref target="LFSReg" />) that would
+        contain a list of LFSs, along with references to the documents that
+        describe the syntactic format and semantics of the security label.
+      </t>
+-->
+
+      <t hangText='MAC-Aware:'>
+        a server that can transmit and store object labels.
+      </t>
+
+      <t hangText='MAC-Functional:'>
+        a client or server that is Labeled NFS enabled. Such a system can
+        interpret labels and apply policies based on the security system.
+      </t>
+
+      <t hangText='Multi-Level Security (MLS):'>
+        a traditional model where objects are given a sensitivity
+        level (Unclassified, Secret, Top Secret, etc.) and a category set
+        <xref target='RH_MLS' />.
+      </t>
+
+      <t hangText='Object:'>
+        a passive resource within the system that we wish to protect.
+        Objects can be entities such as files, directories, pipes,
+        sockets, and many other system resources relevant to the
+        protection of the system state.
+      </t>
+
+      <t hangText='Policy Identifier (PI):'>
+        an optional part of the definition of a Label
+        Format Specifier.  The PI allows clients and servers to identify
+        specific security policies.
+      </t>
+
+      <t hangText='Subject:'>
+        an active entity, usually a process, that is requesting access
+        to an object.
+      </t>
+    </list>
+  </t>
+
+  <section title="Requirements Language">
+    <t>
+      The key words &quot;MUST&quot;, &quot;MUST NOT&quot;,
+      &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;,
+      &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;,
+      &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be
+      interpreted as described in <xref target="RFC2119" />.
+    </t>
+  </section>
+</section>
+
+<section anchor='req' title='Requirements'>
+
+  <t>
+    The following initial requirements have been gathered from users and
+    developers, and from previous development efforts in this area such as
+    the Distributed Trusted Operating System <xref target='DTOS' />
+    and the NSA's experimental NFSv3 enhancements <xref target='SENFSv3' />.
+  </t>
+
+  <section anchor='req:general' title='General'>
+    <t>
+      A mechanism is required to provide security attribute information
+      to NFSv4 clients and servers.  This mechanism has the following
+      requirements:
+    </t>
+
+    <t>
+      <list style='format (%d)'>
+        <t>
+          Clients MUST be able to convey to the server the client's
+          privileges, i.e., the subject, for making the access request.  The server
+          may provide a mechanism to enforce MAC policy based on the
+          requesting client's privileges.
+        </t>
+
+        <t>
+          Servers MUST be able to store and retrieve the security attribute
+          of exported files as requested by the client.
+        </t>
+
+        <t>
+          Servers MUST provide a mechanism for notifying clients of attribute
+          changes of files on the server.
+        </t>
+
+        <t>
+          Clients and Servers MUST be able to negotiate Label Formats
+          and provide a mechanism to translate between them as needed.
+        </t>
+      </list>
+    </t>
+  </section>
+
+  <section anchor='req:secserv' title='Security Services'>
+    <t>
+     Labeled NFS or the underlying system on which the Labeled NFS operates
+     MUST provide the following security services for all NFSv4.2 messaging:
+
+      <list style="symbols">
+        <t>Authentication</t>
+        <t>Integrity</t>
+        <t>Privacy</t>
+      </list>
+    </t>
+
+    <t>
+      Mechanisms and algorithms used in the provision of security services
+      MUST be configurable so that appropriate levels of protection may be
+      flexibly specified per mandatory security policy.
+    </t>
+
+    <t>
+      Strong mutual authentication is required between the server and
+      the client for Full Mode operation (<xref target='modes:full' />).
+    </t>
+
+    <t>
+      MAC security labels and any related security state MUST always be
+      protected by these security services when transferred over the network,
+      as MUST the binding of labels and state to associated objects and
+      subjects.
+    </t>
+
+    <t>
+      Labeled NFS SHOULD support authentication on a context granularity so
+      that different contexts running on a client can use different
+      cryptographic keys and facilities.
+    </t>
+  </section>
+
+  <section anchor='req:encdoi' title='Label Encoding, Label Format Specifiers, and Label Checking Authorities'>
+    <t>
+      Encoding of MAC labels and attributes passed over the network MUST
+      be specified in a complete and unambiguous manner while maintaining the
+      flexibility of MAC implementations. To accomplish this, the labels
+      MUST consist of a format-specific component bound with a Label Format
+      Specifier (LFS).  The LFS component provides a mechanism for
+      identifying the structure and semantics of the opaque component.
+      Meanwhile, the opaque component is the security label that will be
+      interpreted by the MAC models.
+    </t>
+
+    <t>
+      MAC models base access decisions on security attribute privileges
+      bound to subjects and objects, respectively. With a given MAC model,
+      all systems have semantically coherent labeling -- a security label
+      MUST always mean exactly the same thing on every system. While this
+      may not be necessary for simple MAC models, it is recommended that
+      most Label Formats assigned an LFS incorporate semantically coherent
+      labeling into their Label Format.
+    </t>
+
+    <t>
+      Labeled NFS SHOULD define an initial negotiation scheme
+      with the primary aims of simplicity and completeness.  This is to
+      facilitate practical deployment of systems without being
+      weighed down by complex and overgeneralized global schemes.  Future
+      extensibility SHOULD also be taken into consideration.
+    </t>
+
+    <t>
+      Labeled NFS MUST provide a means for servers and clients to identify
+      their LFSs for the purposes of authorization, security service selection,
+      and security label interpretation.
+    </t>
+
+    <t>
+      Labeled NFS MUST provide a means for servers and clients to identify
+      their mode of operation (see <xref target='modes' />).
+    </t>
+
+    <t>
+      A negotiation scheme SHOULD be provided, allowing systems from
+      different Label Formats to agree on how they will interpret or
+      translate each other's foreign labels.  Multiple concurrent agreements
+      may be current between a server and a client.
+    </t>
+
+    <t>
+      All security labels and related security state transferred across the
+      network MUST be tagged with a valid LFS.
+    </t>
+
+    <t>
+      If the LFS supported on a system changes, the system SHOULD renegotiate
+      agreements to reflect these changes.
+    </t>
+
+    <t>
+      If a system receives any security label or security state tagged with an
+      LFS it does not recognize or cannot interpret, it MUST reject that label
+      or state.
+    </t>
+
+    <t>
+      NFSv4.2 includes features that may cause a client to cross an LFS 
+      boundary when accessing what appears to be a single file system.  If LFS
+      negotiation is supported by the client and the server, the server SHOULD
+      negotiate a new, concurrent agreement with the client, acting on behalf
+      of the externally located source of the files.
+    </t>
+  </section>
+
+  <section anchor='req:labeling' title='Labeling'>
+    <t>
+     Implementations MUST validate security labels supplied over the network to
+     ensure that they are within a set of labels permitted from a specific peer
+     and, if not, reject them.  Note that a system may permit a different set
+     of labels to be accepted from each peer.
+    </t>
+
+    <section anchor='req:labeling:client' title='Client Labeling'>
+      <t>
+      At the client, labeling semantics for NFS mounted file systems MUST
+      remain consistent with those for locally mounted file systems.  In
+      particular,
+      user-level labeling operations local to the client MUST be enacted
+      locally via existing APIs, to ensure compatibility and consistency for
+      applications and libraries.
+      </t>
+      <t>
+       Note that this does not imply any specific mechanism for conveying
+       labels over the network.
+      </t>
+      <t>
+        When an object is newly created by the client, it will calculate the label for
+        the object based on its policy. Once that is done, it will send the
+        request to the server, which has the ability to deny the creation of the object
+        with that label based on the server's policy. In creating the file, the server
+        MUST ensure that the label is bound to the object before the object becomes
+        visible to the rest of the system.  This ensures that any access control or
+        further labeling decisions are correct for the object.
+      </t>
+    </section>
+
+    <section anchor='req:labeling:server' title='Server Labeling'>
+      <t>
+        The server MUST provide the capability for clients to retrieve security labels
+        on all exported file system objects where possible.  This includes cases where
+        only in-core and/or read-only security labels are available at the server for
+        any of its exported file systems.
+      </t>
+
+      <t>
+        The server MUST honor the ability for a client to specify the label of
+        an object on creation.  If the server is MAC enabled, it may choose
+        to reject the label specified by the client, due to restrictions in
+        the server policy.  The server SHOULD NOT attempt to find a suitable
+        label for an object in the event of different labeling rules on its
+        end.  The server is allowed to translate the label but MUST NOT
+        change the semantic meaning of the label.
+      </t>
+    </section>
+  </section>
+
+  <section anchor='req:enforce' title='Policy Enforcement'>
+    <t>
+      The MAC-Functional client determines if a process request is sent to
+      the remote server. Upon a successful response from the server, it must
+      use its own policies on the object's security labels to determine
+      if the process can be given access. The client SHOULD NOT need to
+      be cognizant of whether the server is a Limited Server or is
+      fully MAC-Functional.
+
+<!-- [rfced] Section 3.5:  Does "cognizant if the server is either"
+mean "cognizant of whether the server is" in this sentence?  If the
+suggested text is not correct, please clarify.
+
+Original:
+ The client SHOULD NOT
+ need to be cognizant if the server is either a Limited Server or
+ fully MAC-Functional.
+
+Suggested:
+ The client SHOULD NOT
+ need to be cognizant of whether the server is a Limited Server or is
+ fully MAC-Functional.
+
+[tdh] I like the second form.
+
+-->
+
+    </t>
+
+    <section anchor='req:enforce:client' title='Client Enforcement'>
+      <t>
+        The client MUST apply its own policy to remotely located objects, using
+        security labels for the objects obtained from the server.  It MUST be
+        possible to configure the maximum length of time a client may cache
+        state regarding remote labels before revalidating that state with the
+        server.
+      </t>
+
+      <t>
+        If the server's policy changes, the client MUST flush all object state
+        back to the server.  The server MUST ensure that any flushed state
+        received is consistent with current policy before committing it
+        to stable storage.
+      </t>
+
+      <t>
+        Any local security state associated with cached or delegated objects
+        MUST also be flushed back to the server when any other state of the
+        objects is required to be flushed back.
+      </t>
+
+      <t>
+        The implication here is that if the client holds
+        a delegation on an object, then it enforces policy to local changes
+        based on the object label it got from the server. When it tries
+        to commit those changes to the server, it SHOULD be prepared for the
+        server to reject those changes based on the policies of the server.
+      </t>
+    </section>
+
+    <section anchor='req:enforce:server' title='Server Enforcement'>
+      <t>
+        A MAC-Functional server MUST enforce its security policy over all
+        exported objects, for operations that originate both locally and
+        remotely.
+      </t>
+
+      <t>
+        Requests from authenticated clients MUST be processed using security
+        labels and credentials supplied by the client as if they originated
+        locally.
+      </t>
+
+      <t>
+        As with labeling, the system MUST also take into account any other
+        volatile client security state, such as a change in process security
+        context via dynamic transition.  Access decisions SHOULD also be made
+        based upon the current client security label accessing the object,
+        rather than the security label that opened it, if different.
+      </t>
+
+      <t>
+        The server SHOULD recall delegation of an object if the object's
+        security label changes.
+      </t>
+    </section>
+  </section>
+
+  <section anchor='req:namespace' title='Namespace Access'>
+    <t>
+      The server SHOULD provide a means to authorize selective access to the
+      exported file system namespace based upon client credentials and
+      according to security policy.
+    </t>
+
+    <t>
+      This is a common requirement of MLS-enabled systems, which often need
+      to present selective views of namespaces based upon the clearances of
+      the subjects.
+    </t>
+  </section>
+
+  <section anchor='req:upgrade' title='Upgrading Existing Server'>
+    <t>
+      Note that under the MAC model, all objects MUST have labels.
+      Therefore, if an existing server is upgraded to include Labeled NFS
+      support, then it is the responsibility of the security system to
+      define the behavior for existing objects.
+    </t>
+  </section>
+</section>
+
+<section anchor='modes' title='Modes of Operation'>
+  <t>
+    In a Labeled NFS client and server interaction, we can describe three
+    modes of operation:
+
+    <list style='numbers'>
+      <t>
+        Full
+      </t>
+
+      <t>
+        Limited Server
+      </t>
+
+      <t>
+        Guest
+      </t>
+    </list>
+
+    These modes arise from the level of MAC functionality in the clients and
+    servers.  The clients can be non-MAC-Functional and MAC-Functional. 
+    The servers can be non-MAC-Functional, MAC-Aware, and MAC-Functional.
+  </t>
+
+  <t>
+    A MAC-Functional client MUST be able to determine the level of MAC
+    functionality in the server.  Likewise, a MAC-Functional server MUST
+    be able to determine whether or not a client is MAC-Functional. As
+    discussed in <xref target='req:encdoi' />, the protocol MUST provide
+    for the client and server to make those determinations.
+  </t>
+
+  <section anchor='modes:full' title='Full Mode'>
+    <t>
+      The server and the client have mutually recognized MAC
+      functionality enabled, and full Labeled NFS functionality is extended
+      over the network between both client and server.
+    </t>
+
+    <t>
+      An example of an operation in Full Mode is as follows. On the initial
+      lookup, the client requests access to an object on the server. It
+      sends its process security context over to the server. The server
+      checks all relevant policies to determine if that process context
+      from that client is allowed to access the resource. Once this has
+      succeeded, the object, with its associated security information, is
+      released to the client. Once the client receives the object, it
+      determines if its policies allow the process running on the client
+      access to the object.
+    </t>
+
+    <t>
+      On subsequent operations where the client already has a handle for the
+      file, the order of enforcement is reversed. Since the client already
+      has the security context, it may make an access decision against its
+      policy first. This enables the client to avoid sending requests to the
+      server that it knows will fail, regardless of the server's policy.
+      If the client passes its policy checks, then it sends the request to
+      the server, where the client's process context is used to determine if
+      the server will release that resource to the client. If both checks
+      pass, the client is given the resource and everything succeeds.
+    </t>
+
+    <t>
+      In the event that the client does not trust the server, it may opt to
+      use an alternate labeling mechanism, regardless of the server's
+      ability to return security information.
+    </t>
+  </section>
+
+  <section anchor='modes:limited' title='Limited Server Mode'>
+    <t>
+      The server is MAC-Aware, and the clients are MAC-Functional. The
+      server can store and transmit labels. It cannot enforce labels. The
+      server MUST inform clients when an object label changes for a file
+      the client has open.
+    </t>
+    <t>
+      In this mode, the server may not be aware of the format of any of its
+      object labels. Indeed, it may service several different security models
+      at the same time. A client MUST process foreign labels as discussed
+      in <xref target="req:encdoi" />. As with the Guest Mode, this mode's
+      level of trust can be degraded if non-MAC-Functional clients have
+      access to the server.
+    </t>
+  </section>
+
+  <section anchor='modes:guest' title='Guest Mode'>
+    <t>
+      Only one of the server or client is MAC-Functional enabled.
+    </t>
+
+    <t>
+      In the case of the server only being MAC-Functional, the server
+      enforces its policy and may selectively provide standard NFS
+      services to clients based on their authentication credentials and/or
+      associated network attributes (e.g., IP address, network interface)
+      according to security policy.  The level of trust and access extended
+      to a client in this mode is configuration-specific.
+    </t>
+
+    <t>
+      In the case of the client only being MAC-Functional, the
+      client MUST operate as a standard NFSv4.2
+      (see <xref target='NFSv4_2' />) client and SHOULD
+      selectively provide processes access to servers based upon the security
+      attributes of the local process, and network attributes of the server,
+      according to policy.  The client may also override default labeling of
+      the remote file system based upon these security attributes or other
+      labeling methods such as mount point labeling.
+    </t>
+
+    <t>
+      In other words, the Guest Mode is standard NFSv4.2 over the wire, with
+      the MAC-Functional system mapping the non-MAC-Functional system's
+      processes or objects to security labels based on other characteristics
+      in order to preserve its MAC guarantees.
+    </t>
+  </section>
+</section>
+
+<section anchor='sec:examples' title='Use Cases'>
+  <t>
+    MAC labeling is meant to allow NFSv4.2 to be deployed in
+    site-configurable security schemes. The LFS and opaque data scheme
+    allows for flexibility to meet these different implementations.
+    In this section, we provide some examples of how NFSv4.2
+    could be deployed to meet existing needs. This is not an
+    exhaustive listing.
+  </t>
+
+  <section anchor='ss:examples:full' title='Full MAC Labeling Support for Remotely Mounted Filesystems'>
+    <t>
+      In this case, we assume a local networked environment where the
+      servers and clients are under common administrative control.  All
+      systems in this network have the same MAC implementation and
+      semantically identical MAC security labels for objects (i.e., labels
+      mean the same thing on different systems, even if the policies on
+      each system may differ to some extent).  Clients will be able to
+      apply fine-grained MAC policy to objects accessed via NFS mounts and
+      thus improve the overall consistency of MAC policy application within
+      this environment.
+    </t>
+
+    <t>
+      An example of this case would be where user home directories are
+      remotely mounted, and fine-grained MAC policy is implemented to
+      protect, for example, private user data from being read by malicious
+      web scripts running in the user's browser.  With Labeled NFS,
+      fine-grained MAC labeling of the user's files will allow the MAC
+      policy to be implemented and provide the desired protection.
+    </t>
+  </section>
+
+  <section anchor='ss:examples:vms' title='MAC Labeling of Virtual Machine Images Stored on the Network'>
+    <t>
+      Virtualization is now a commonly implemented feature of modern
+      operating systems, and there is a need to ensure that MAC security
+      policy is able to protect virtualized resources.  A common
+      implementation scheme involves storing virtualized guest file systems
+      on a networked server; these file systems are then mounted remotely
+      by guests upon instantiation.  In this case, there is a need to ensure
+      that the local guest kernel is able to access fine-grained MAC labels
+      on the remotely mounted file system so that its MAC security policy can be
+      applied.
+    </t>
+  </section>
+
+  <section anchor='ss:examples:simple' title='Simple Security Label Storage'>
+    <t>
+      In this case, a mixed and loosely administered network is assumed,
+      where nodes may be running a variety of operating systems with
+      different security mechanisms and security policies.  It is desired
+      that network file servers be simply capable of storing and retrieving
+      MAC security labels for clients that use such labels.  The Labeled NFS
+      protocol would be implemented here solely to enable transport of
+      MAC security labels across the network.  It should be noted that in
+      such an environment, overall security cannot be as strongly enforced
+      as when the server is also enforcing and that this scheme is aimed at
+      allowing MAC-capable clients to function with its MAC security policy
+      enabled rather than perhaps disabling it entirely.
+    </t>
+  </section>
+
+  <section anchor='ss:examples:diskless' title='Diskless Linux'>
+    <t>
+      A number of popular operating system distributions depend on
+      a Mandatory Access Control (MAC) model to implement a
+      kernel-enforced security policy. Typically, such models assign
+      particular roles to individual processes, which limit or
+      permit performing certain operations on a set of files,
+      directories, sockets, or other objects.  While the enforcing
+      of the policy is typically a matter for the diskless NFS
+      client itself, the file system objects in such models will
+      typically carry MAC labels that are used to define policy on
+      access.  These policies may, for instance, describe privilege
+      transitions that cannot be replicated using standard NFS
+      ACL-based models.
+    </t>
+
+<!-- [rfced] Will the reader be aware of what "SYSV" is, or 
+should an explanation or reference be added? We note that 
+SYSV hasn't been mentioned in RFCs since RFC 1564 (20 years ago).
+
+Current:
+   For instance, on a SYSV-compatible system, if the 'init' process
+   spawns a process that attempts to start the 'NetworkManager'
+   executable, there may be a policy that sets up a role transition if
+   the 'init' process and 'NetworkManager' file labels match a
+   particular rule. 
+
+[tdh] So SYSV is important to the discussion.
+-->
+
+    <t>
+      For instance, on a SYSV-compatible system (see <xref target='SYSV' />), if the 'init' process
+      spawns a process that attempts to start the 'NetworkManager'
+      executable, there may be a policy that sets up a role transition
+      if the 'init' process and 'NetworkManager' file labels match
+      a particular rule. Without this role transition, the process
+      may find itself having insufficient privileges to perform its
+      primary job of configuring network interfaces.
+    </t>
+
+    <t>
+      In setups of this type, a lot of the policy targets (such as sockets or
+      privileged system calls) are entirely local to the client. The use of
+      RPCSEC_GSSv3 (<xref target="RPC_SEC" />) for enforcing compliance at
+      the server level is therefore of limited value. The ability to
+      permanently label files and have those labels read back by the client
+      is, however, crucial to the ability to enforce that policy.
+    </t>
+  </section>
+
+  <section anchor='ss:examples:mls' title='Multi-Level Security'>
+    <t>
+      In an MLS system, objects are generally assigned
+      a sensitivity level and a set of compartments.  The sensitivity
+      levels within the system are given an order ranging from lowest to
+      highest classification level.  Read access to an object is allowed
+      when the sensitivity level of the subject "dominates" the object it
+      wants to access.  This means that the sensitivity level of the
+      subject is higher than that of the object it wishes to access and
+      that its set of compartments is a superset of the compartments on
+      the object.
+    </t>
+
+    <t>
+      The rest of this section will just use sensitivity levels.  In general,
+      the example is a client that wishes to list the contents of a
+      directory.  The system defines the sensitivity levels as
+      Unclassified (U), Secret (S), and Top Secret (TS).  The directory to be
+      searched is labeled Top Secret, which means access to read the
+      directory will only be granted if the subject making the request is
+      also labeled Top Secret.
+    </t>
+
+    <section anchor='ss:examples:fm' title='Full Mode - MAC-Functional Client and Server'>
+      <t>
+        In the first part of this example, a process on the client is running
+        at the Secret level.  The process issues a readdir() system call, which
+        enters the kernel.  Before translating the readdir() system call into a
+        request to the NFSv4.2 server, the host operating system will consult
+        the MAC module to see if the operation is allowed.  Since the process
+        is operating at Secret and the directory to be accessed is labeled
+        Top Secret, the MAC module will deny the request and an error code is
+        returned to user space.
+      </t>
+
+      <t>
+        Consider a second case where instead of running at Secret the process
+        is running at Top Secret.  In this case, the sensitivity of the
+        process is equal to or greater than that of the directory, so the MAC
+        module will allow the request.  Now the readdir() is translated into
+        the necessary NFSv4.2 call to the server.  For the remote procedure
+        call (RPC) request, the client is using the proper credential to
+        assert to the server that the process is running at Top Secret.
+      </t>
+
+      <t>
+        When the server receives the request, it extracts the security label
+        from the RPC session and retrieves the label on the directory.  The
+        server then checks with its MAC module to see if a Top Secret process
+        is allowed to read the contents of the Top Secret directory.  Since
+        this is allowed by the policy, then the server will return the
+        appropriate information back to the client.
+      </t>
+
+      <t>
+        In this example, the policy on both the client and server is the
+        same.  In the event that they were running different policies, a
+        translation of the labels might be needed.  In this case, it could be
+        possible for a check to pass on the client and fail on the server.
+        The server may consider additional information when making its policy
+        decisions.  For example, the server could determine that a certain
+        subnet is only cleared for data up to Secret classification.  If that
+        constraint was in place for the example above, the client would still
+        succeed, but the server would fail, since the client is asserting a
+        label that it is not able to use (Top Secret on a Secret network).
+      </t>
+    </section>
+
+    <section anchor='ss:examples:mec' title='MAC-Functional Client'>
+      <t>
+        In these scenarios, the server is either non-MAC-Aware or MAC-Aware.
+        The actions of the client will depend on whether it is configured to
+        treat the MAC-Aware server in the same manner as the non-MAC-Aware one.
+        That is, does it utilize the approach presented
+        in <xref target="modes:guest" />, or does it allow the MAC-Aware
+        server to return labels?
+      </t>
+
+      <t>
+          With a client that is MAC-Functional and using the example in the
+          previous section, the result should be the same. The one difference
+          is that all decisions are made on the client.
+      </t>
+
+      <section anchor='ss:examples:mfcmas' title='MAC-Aware Server'>
+        <t>
+          A process on the client
+          labeled Secret wishes to access a directory labeled Top Secret
+          on the server.  This is denied, since Secret does not dominate
+          Top Secret.  Note that there will be NFSv4.2 operations issued that
+          return an object label for the client to process.
+        </t>
+
+        <t>
+          Note that in this scenario, all of the clients must be
+          MAC-Functional.  A single client that does not do its access
+          control checks would violate the model.
+        </t>
+      </section>
+
+      <section anchor='ss:examples:mfcnmas' title='Non-MAC-Aware Server'>
+        <t>
+          A process on the client labeled Secret wishes to access a directory
+          that the client's policies label as Top Secret on the server.  This
+          is denied, since Secret does not dominate Top Secret.  Note
+          that there will not be NFSv4.2 operations issued. If the process
+          had a Top Secret process label instead of Secret, the client would
+          issue NFSv4.2 operations to access the directory on the server.
+        </t>
+      </section>
+    </section>
+
+    <section anchor='ss:examples:pes' title='MAC-Functional Server'>
+      <t>
+        With a MAC-Functional server and a client that is not, the
+        client behaves as if it were in a normal NFSv4.2 environment.
+        Since the process on the client does not provide a security
+        attribute, the server must define a mechanism for labeling all
+        requests from a client.  Assume that the server is using the
+        same criteria used in the first example.  The server sees
+        the request as coming from a subnet that is a Secret network.
+        The server determines that all clients on that subnet will
+        have their requests labeled with Secret.  Since the directory
+        on the server is labeled Top Secret and Secret does not
+        dominate Top Secret, the server would fail the request with
+        NFS4ERR_ACCESS.
+      </t>
+    </section>
+  </section>
+</section>
+
+<section anchor="sec:security" title="Security Considerations">
+  <section anchor="ss:sec:mac" title="Trust Needed for a Community">
+    <t>
+     Labeled NFS is a transport mechanism for labels, a storage requirement for
+     labels, and a definition of how to interpret labels. It defines the
+     responsibilities of the client and the server in the various permutations
+     of being MAC-Functional. It does not, however, dictate in any manner
+     whether assumptions can be made about other entities in the relationship.
+     For example, it does not define whether a MAC-Functional client
+     can demand that a MAC-Aware server only accept requests from
+     other MAC-Functional clients. That is a policy based on a MAC model,
+     and this document does not impose policies on systems.
+    </t>
+
+    <t>
+     As the requirement is a policy, it can be met with the use of a MAC model.
+     Let L be an LFS that implements the Limited Server mode, i.e., a
+     MAC-Aware server connected to MAC-Functional clients. Then a new LFS,
+     L', can be created that has the additional policy that the MAC-Aware
+     server MUST NOT accept any requests from a non-MAC-Functional client.
+    </t>
+  </section>
+
+  <section anchor="sec:sec:guest" title="Guest Mode">
+    <t>
+<!-- [rfced] Section 6.2 (originally Section 7.2):  We see that the
+section title is the plural "Guest Modes" but do not see any
+indication elsewhere in the document regarding different types of
+guest modes.  Should this be singular (""Guest Mode")?
+
+[tdh] Okay, change made
+
+FWIW - I believe the difference was between the Guest Mode on the
+server and on the client, hence Modes.
+
+Original:
+7.2.  Guest Modes -->
+
+    When either the client or server is operating in Guest Mode, it is
+    important to realize that one side is not enforcing MAC protections.
+    Alternate methods are being used to handle the lack of MAC support,
+    and care should be taken to identify and mitigate threats from
+    possible tampering outside of these methods.
+    </t>
+  </section>
+
+  <section anchor="sec:sec:client" title="MAC-Functional Client Configuration">
+    <t>
+     We defined a MAC model as an access control decision made on a system
+     in which normal users do not have the ability to override policies
+     (see <xref target="sec:intro" />).  If the process labels are created
+     solely on the client, then if a malicious user has sufficient access on
+     that client, the Labeled NFS model is compromised. Note that this is no
+     different from:
+
+      <list style='symbols'>
+        <t>
+        current implementations in which the server uses policies to
+        effectively determine the object label for requests from the client, or
+        </t>
+
+        <t>
+        local decisions made on the client by the MAC security system.
+        </t>
+      </list>
+
+      Either the server must explicitly trust the client (as
+      in <xref target="SENFSv3" />) or the MAC model should enforce that
+      users cannot override policies, perhaps via an externally managed source.
+    </t>
+
+    <t>
+      Once the labels leave the client, they can be protected by the
+      transport mechanism as described in <xref target="req:secserv" />.
+    </t>
+  </section>
+</section>
+
+</middle>
+
+<back>
+
+  <references title="Normative References">
+
+  <?rfc include="reference.RFC.2119"?>
+
+</references>
+
+<references title="Informative References">
+
+  <?rfc include="reference.RFC.4949"?>
+
+<!-- draft-ietf-nfsv4-rpcsec-gssv3 (AD is watching) -->
+<reference anchor='RPC_SEC'>
+<front>
+<title>Remote Procedure Call (RPC) Security Version 3</title>
+<author initials='W' surname='Adamson' fullname='William A. (Andy) Adamson'>
+    <organization />
+</author>
+<author initials='N' surname='Williams' fullname='Nico Williams'>
+    <organization />
+</author>
+<date month='February' year='2014' />
+</front>
+<seriesInfo name='Work in' value='Progress' />
+</reference>
+
+<!-- draft-quigley-label-format-registry (Expired)
+    <reference anchor="LFSReg">
+      <front>
+        <title>Registry Specification for MAC Security Label Formats</title>
+        <author initials="D." surname="Quigley" />
+        <author initials="J." surname="Lu" />
+        <date month="March" year="2011" />
+      </front>
+      <seriesInfo name="Work in" value="Progress"/>
+    </reference>
+-->
+
+<!-- draft-ietf-nfsv4-minorversion2 (AD is watching) -->
+<reference anchor='NFSv4_2'>
+<front>
+<title>NFS Version 4 Minor Version 2</title>
+<author initials='T' surname='Haynes' fullname='Tom Haynes'>
+    <organization />
+</author>
+<date month='February' year='2014' />
+</front>
+<seriesInfo name='Work in' value='Progress' />
+</reference>
+
+  <reference anchor='RH_MLS' target="http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Linux/5/html/Deployment_Guide/sec-mls-ov.html">
+    <front>
+      <title>Multi-Level Security (MLS)</title>
+      <author />
+      <date year='2013' />
+    </front>
+   <seriesInfo name="&quot;Deployment, configuration and administration of Red Hat Enterprise Linux 5," value="Edition 10&quot;, Section 49.6"/>
+  </reference>
+
+<!-- [rfced] Informative References:  Per the provided URL, we have
+updated the listing for [RH_MLS] to reflect the correct section,
+title, and date.  Please let us know if anything is incorrect.
+
+Original:
+ [RH_MLS]   "Section 46.6. Multi-Level Security (MLS) of Deployment
+             Guide: Deployment, configuration and administration of Red
+             Hat Enterprise Linux 5, Edition 6 ", 2011.
+
+Changed to:
+ [RH_MLS]   "Multi-Level Security (MLS)", "Deployment, configuration
+             and administration of Red Hat Enterprise Linux 5, Edition
+             10", Section 49.6, 2013, <http://docs.redhat.com/docs/
+             en-US/Red_Hat_Enterprise_Linux/5/html/Deployment_Guide/
+             sec-mls-ov.html>.
+
+[tdh] Fine with the change.
+
+-->
+
+<reference anchor='DTOS'
+target='http://www.cs.utah.edu/flux/fluke/html/dtos/HTML/dtos.html'>
+  <front>
+    <title abbrev='DTOS'>
+      The Distributed Trusted Operating System (DTOS) Home Page
+    </title>
+    <author initials='S.' surname='Smalley' fullname='Stephen Smalley'>
+      <organization>
+      National Security Agency
+      </organization>
+    </author>
+    <date month='December' year='2000' />
+  </front>
+</reference>
+
+  <reference anchor='SENFSv3' target='http://www.nsa.gov/research/_files/selinux/papers/nfsv3.pdf'>
+    <front>
+      <title abbrev='SENFSv3'>Implementing SELinux Support for NFS</title>
+      <author initials="J.W." surname="Carter" fullname="James W. Carter">
+        <organization abbrev="NSA">
+        National Security Agency
+        </organization>
+        <address>
+          <postal>
+            <street>9800 Savage Rd.</street>
+            <street>Suite 6534</street>
+            <city>Ft. Meade</city>
+            <region>MD</region>
+            <code>20755-6534</code>
+          </postal>
+          <email>jwcart2@tycho.nsa.gov</email>
+        </address>
+      </author>
+      <date />
+    </front>
+  </reference>
+
+<reference anchor='SYSV'>
+  <front>
+    <title abbrev='SYSV'>
+      System V Interface Definition (SVID)
+    </title>
+    <author>
+      <organization>
+      AT&amp;T
+      </organization>
+    </author>
+    <date year='1989' />
+  </front>
+<seriesInfo name="Third Edition, Addison-Wesley," value="Reading, MA" />
+</reference>
+
+
+</references>
+
+<section title="Acknowledgments">
+  <t>
+    David Quigley was the early energy in motivating the entire Labeled NFS
+    effort.
+  </t>
+
+  <t>
+    James Morris, Jarrett Lu, and Stephen Smalley all were key contributors
+    to both early versions of this document and to many conference calls.
+  </t>
+
+  <t>
+    Kathleen Moriarty provided use cases for earlier versions of the document.
+  </t>
+
+  <t>
+    Dan Walsh provided use cases for Secure Virtualization, Sandboxing,
+    and NFS homedir labeling to handle process separation.
+  </t>
+
+  <t>
+    Trond Myklebust provided use cases for secure diskless NFS clients.
+  </t>
+
+  <t>
+    Both Nico Williams and Bryce Nordgren challenged assumptions during the
+    review processes.
+  </t>
+</section>
+
+</back>
+
+</rfc>

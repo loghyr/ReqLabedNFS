@@ -1,0 +1,862 @@
+<html><head><title>wdiff rfc7204.original rfc7204.txt</title></head><body>
+<pre>
+
+<strike><font color='red'>NFSv4</font></strike>
+<strong><font color='green'>Internet Engineering Task Force (IETF)</font></strong>                         T. Haynes
+<strike><font color='red'>Internet-Draft</font></strike>
+<strong><font color='green'>Request for Comments: 7204</font></strong>                                        NetApp
+<strike><font color='red'>Intended status:</font></strike>
+<strong><font color='green'>Category:</font></strong> Informational                         <strike><font color='red'>December 02, 2013
+Expires: June 05,</font></strike>                                       <strong><font color='green'>April</font></strong> 2014
+<strong><font color='green'>ISSN: 2070-1721</font></strong>
+
+                      Requirements for Labeled NFS
+                    <strike><font color='red'>draft-ietf-nfsv4-labreqs-05.txt</font></strike>
+
+Abstract
+
+   This memo outlines high-level requirements for the integration of
+   flexible Mandatory Access Control (MAC) functionality into the
+   Network File System (NFS) version 4.2 (NFSv4.2).  It describes the
+   level of protections that should be provided over protocol components
+   and the basic structure of the proposed system.  The intent here is
+   not to present the protocol <strike><font color='red'>changes,</font></strike> <strong><font color='green'>changes</font></strong> but to describe the environment
+   in which they reside.
+
+Status of This Memo
+
+   This <strike><font color='red'>Internet-Draft</font></strike> <strong><font color='green'>document</font></strong> is <strike><font color='red'>submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents</font></strike> <strong><font color='green'>not an Internet Standards Track specification; it is
+   published for informational purposes.
+
+   This document is a product</font></strong> of the Internet Engineering Task Force
+   (IETF).  <strike><font color='red'>Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list</font></strike>  <strong><font color='green'>It represents the consensus</font></strong> of <strike><font color='red'>current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid</font></strike> <strong><font color='green'>the IETF community.  It has
+   received public review and has been approved</font></strong> for <strong><font color='green'>publication by the
+   Internet Engineering Steering Group (IESG).  Not all documents
+   approved by the IESG are</font></strong> a <strike><font color='red'>maximum</font></strike> <strong><font color='green'>candidate for any level of Internet
+   Standard; see Section 2 of RFC 5741.
+
+   Information about the current status</font></strong> of <strike><font color='red'>six months</font></strike> <strong><font color='green'>this document, any errata,</font></strong>
+   and <strong><font color='green'>how to provide feedback on it</font></strong> may be <strike><font color='red'>updated, replaced, or obsoleted by other documents</font></strike> <strong><font color='green'>obtained</font></strong> at <strike><font color='red'>any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on June 05, 2014.</font></strike>
+   <strong><font color='green'>http://www.rfc-editor.org/info/rfc7204.</font></strong>
+
+Copyright Notice
+
+   Copyright (c) <strike><font color='red'>2013</font></strike> <strong><font color='green'>2014</font></strong> IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   <strike><font color='red'>3</font></strike>   <strong><font color='green'>2</font></strong>
+   2.  Definitions . . . . . . . . . . . . . . . . . . . . . . . . .   3
+     2.1.  Requirements Language . . . . . . . . . . . . . . . . . .   4
+   3.  Requirements  . . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.1.  General . . . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.2.  Security Services . . . . . . . . . . . . . . . . . . . .   5
+     3.3.  Label Encoding, Label Format Specifiers, and Label
+           Checking Authorities  . . . . . . . . . . . . . . . . . .   5
+     3.4.  Labeling  . . . . . . . . . . . . . . . . . . . . . . . .   6
+       3.4.1.  Client Labeling . . . . . . . . . . . . . . . . . . .   6
+       3.4.2.  Server Labeling . . . . . . . . . . . . . . . . . . .   7
+     3.5.  Policy Enforcement  . . . . . . . . . . . . . . . . . . .   7
+       3.5.1.  Client Enforcement  . . . . . . . . . . . . . . . . .   7
+       3.5.2.  Server Enforcement  . . . . . . . . . . . . . . . . .   8
+     3.6.  Namespace Access  . . . . . . . . . . . . . . . . . . . .   8
+     3.7.  Upgrading Existing Server . . . . . . . . . . . . . . . .   8
+   4.  Modes of Operation  . . . . . . . . . . . . . . . . . . . . .   9
+     4.1.  Full Mode . . . . . . . . . . . . . . . . . . . . . . . .   9
+     4.2.  Limited Server Mode . . . . . . . . . . . . . . . . . . .  10
+     4.3.  Guest Mode  . . . . . . . . . . . . . . . . . . . . . . .  10
+   5.  Use Cases . . . . . . . . . . . . . . . . . . . . . . . . . .  <strike><font color='red'>11</font></strike>  <strong><font color='green'>10</font></strong>
+     5.1.  Full MAC <strike><font color='red'>labeling support</font></strike> <strong><font color='green'>Labeling Support</font></strong> for <strike><font color='red'>remotely mounted
+           filesystems</font></strike> <strong><font color='green'>Remotely Mounted
+           Filesystems</font></strong> . . . . . . . . . . . . . . . . . . . . . . .  11
+     5.2.  MAC <strike><font color='red'>labeling</font></strike> <strong><font color='green'>Labeling</font></strong> of <strike><font color='red'>virtual machine images stored</font></strike> <strong><font color='green'>Virtual Machine Images Stored</font></strong> on the
+           <strike><font color='red'>network</font></strike>
+           <strong><font color='green'>Network</font></strong> . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     5.3.  Simple <strike><font color='red'>security label storage</font></strike> <strong><font color='green'>Security Label Storage</font></strong> . . . . . . . . . . . . . .  11
+     5.4.  Diskless Linux  . . . . . . . . . . . . . . . . . . . . .  12
+     5.5.  Multi-Level Security  . . . . . . . . . . . . . . . . . .  12
+       5.5.1.  Full Mode - <strike><font color='red'>MAC-functional</font></strike> <strong><font color='green'>MAC-Functional</font></strong> Client and Server  . . . .  13
+       5.5.2.  MAC-Functional Client . . . . . . . . . . . . . . . .  <strike><font color='red'>14</font></strike>  <strong><font color='green'>13</font></strong>
+       5.5.3.  MAC-Functional Server . . . . . . . . . . . . . . . .  14
+   6.  <strike><font color='red'>IANA Considerations . . . . . . . . . . . . . . . . . . . . .  15
+   7.</font></strike>  Security Considerations . . . . . . . . . . . . . . . . . . .  <strike><font color='red'>15
+     7.1.</font></strike>  <strong><font color='green'>14
+     6.1.</font></strong>  Trust Needed for a Community  . . . . . . . . . . . . . .  <strike><font color='red'>15
+     7.2.</font></strike>  <strong><font color='green'>14
+     6.2.</font></strong>  Guest Modes . . . . . . . . . . . . . . . . . . . . . . .  15
+     <strike><font color='red'>7.3.</font></strike>
+     <strong><font color='green'>6.3.</font></strong>  MAC-Functional Client Configuration . . . . . . . . . . .  15
+   <strike><font color='red'>8.</font></strike>
+   <strong><font color='green'>7.</font></strong>  References  . . . . . . . . . . . . . . . . . . . . . . . . .  <strike><font color='red'>16
+     8.1.</font></strike>  <strong><font color='green'>15
+     7.1.</font></strong>  Normative References  . . . . . . . . . . . . . . . . . .  <strike><font color='red'>16
+     8.2.</font></strike>  <strong><font color='green'>15
+     7.2.</font></strong>  Informative References  . . . . . . . . . . . . . . . . .  16
+   Appendix A.  Acknowledgments  . . . . . . . . . . . . . . . . . .  17
+   <strike><font color='red'>Appendix B.  RFC Editor Notes . . . . . . . . . . . . . . . . . .  17
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  17</font></strike>
+
+1.  Introduction
+
+   Mandatory Access Control (MAC) ([RFC4949]) systems have been
+   mainstreamed in modern operating systems such as Linux, FreeBSD, and
+   Solaris.  MAC systems bind security attributes to subjects
+   (processes) and objects within a system.  These attributes are used
+   with other information in the system to make access control
+   decisions.
+
+   Access control models such as Unix permissions or Access Control
+   Lists <strong><font color='green'>(ACLs)</font></strong> are commonly referred to as Discretionary Access Control
+   (DAC) models.  These systems base their access decisions on user
+   identity and resource ownership.  In <strike><font color='red'>contrast</font></strike> <strong><font color='green'>contrast,</font></strong> MAC models base their
+   access control decisions on the label on the subject (usually a
+   process) and the object it wishes to access.  These labels may
+   contain user identity information but usually contain additional
+   information.  In DAC <strike><font color='red'>systems</font></strike> <strong><font color='green'>systems,</font></strong> users are free to specify the access
+   rules for resources that they own.  MAC models base their security
+   decisions on a <strike><font color='red'>system
+   wide</font></strike> <strong><font color='green'>system-wide</font></strong> policy established by an administrator or
+   organization <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> the users do not have the ability to override.  DAC
+   systems <strike><font color='red'>offers</font></strike> <strong><font color='green'>offer</font></strong> some protection against unauthorized users running
+   malicious software.  However, even an authorized user can execute
+   malicious or flawed software with those programs running with the
+   full permissions of the user executing it.  <strike><font color='red'>Inversely</font></strike>  <strong><font color='green'>Inversely,</font></strong> MAC models can
+   confine malicious or flawed software and usually act at a finer
+   granularity than their DAC counterparts.
+
+   Besides describing the requirements, this document records the
+   functional requirements for the client imposed by the <strike><font color='red'>pre-existing</font></strike> <strong><font color='green'>preexisting</font></strong>
+   security models on the client.  This document may help those outside
+   the NFS community understand those issues.
+
+2.  Definitions
+
+   Foreign Label:  <strike><font color='red'>is when a MAC implementation encounters</font></strike>  a label in a format other than <strike><font color='red'>it</font></strike> <strong><font color='green'>the format that a MAC
+      implementation</font></strong> uses for encoding.
+
+   Label Format Specifier (LFS):  <strike><font color='red'>is</font></strike>  an identifier used by the client to
+      establish the syntactic format of the security label and the
+      semantic meaning of its components.
+
+   Label Format Registry:  <strike><font color='red'>is</font></strike>  the IANA registry (see <strike><font color='red'>[lfsreg])</font></strike> <strong><font color='green'>[LFSReg])</font></strong> containing
+      all registered <strike><font color='red'>LFS</font></strike> <strong><font color='green'>LFSs,</font></strong> along with references to the documents that
+      describe the syntactic format and semantics of the security label.
+
+   MAC-Aware:  <strike><font color='red'>is</font></strike>  a server <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> can transmit and store object labels.
+
+   MAC-Functional:  <strike><font color='red'>is</font></strike>  a client or server <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> is Labeled NFS enabled.
+      Such a system can interpret labels and apply policies based on the
+      security system.
+
+   Multi-Level Security (MLS):  <strike><font color='red'>is</font></strike>  a traditional model where objects are
+      given a sensitivity level (Unclassified, Secret, Top Secret, <strike><font color='red'>etc)</font></strike> <strong><font color='green'>etc.)</font></strong>
+      and a category set [RH_MLS].
+
+   Object:  <strike><font color='red'>is</font></strike>  a passive resource within the system that we wish to <strike><font color='red'>be
+      protected.</font></strike>
+      <strong><font color='green'>protect.</font></strong>  Objects can be entities such as files, directories,
+      pipes, sockets, and many other system resources relevant to the
+      protection of the system state.
+
+   Policy Identifier (PI):  <strike><font color='red'>is</font></strike>  an optional part of the definition of a
+      Label Format <strike><font color='red'>Specifier which</font></strike> <strong><font color='green'>Specifier.  The PI</font></strong> allows <strike><font color='red'>for</font></strike> clients and <strike><font color='red'>server</font></strike> <strong><font color='green'>servers</font></strong> to
+      identify specific security policies.
+
+   Subject:  <strike><font color='red'>is</font></strike>  an active entity, usually a process, <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> is requesting
+      access to an object.
+
+2.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [RFC2119].
+
+3.  Requirements
+
+   The following initial requirements have been gathered from <strike><font color='red'>users,</font></strike> <strong><font color='green'>users and</font></strong>
+   developers, and from previous development efforts in this area such
+   as <strike><font color='red'>DTOS</font></strike> <strong><font color='green'>the Distributed Trusted Operating System</font></strong> [DTOS] and <strong><font color='green'>the</font></strong> NSA's
+   experimental NFSv3 enhancements <strike><font color='red'>[SENFSV3].</font></strike> <strong><font color='green'>[SENFSv3].</font></strong>
+
+3.1.  General
+
+   A mechanism is required to provide security attribute information to
+   NFSv4 clients and servers.  This mechanism has the following
+   requirements:
+
+   (1)  Clients MUST be able to convey to the server the client's
+      <strike><font color='red'>priveleges,</font></strike>
+        <strong><font color='green'>privileges,</font></strong> i.e., the subject, for making the access request.
+        The server may provide a mechanism to enforce MAC policy based
+        on the requesting client's <strike><font color='red'>priveleges.</font></strike> <strong><font color='green'>privileges.</font></strong>
+
+   (2)  Servers MUST be able to store and retrieve the security
+        attribute of exported files as requested by the client.
+
+   (3)  Servers MUST provide a mechanism for notifying clients of
+        attribute changes of files on the server.
+
+   (4)  Clients and Servers MUST be able to negotiate Label Formats and
+        provide a mechanism to translate between them as needed.
+
+3.2.  Security Services
+
+   Labeled NFS or the underlying system on which the Labeled NFS
+   operates MUST provide the following security services for all NFSv4.2
+   <strike><font color='red'>messaging</font></strike>
+   <strong><font color='green'>messaging:</font></strong>
+
+   o  Authentication
+
+   o  Integrity
+
+   o  Privacy
+
+   Mechanisms and algorithms used in the provision of security services
+   MUST be <strike><font color='red'>configurable,</font></strike> <strong><font color='green'>configurable</font></strong> so that appropriate levels of protection may be
+   flexibly specified per mandatory security policy.
+
+   Strong mutual authentication is required between the server and the
+   client for Full Mode operation <strike><font color='red'>Section 4.1.</font></strike> <strong><font color='green'>(Section 4.1).</font></strong>
+
+   MAC security labels and any related security state MUST always be
+   protected by these security services when transferred over the
+   <strike><font color='red'>network;</font></strike>
+   <strong><font color='green'>network,</font></strong> as MUST the binding of labels and state to associated
+   objects and subjects.
+
+   Labeled NFS SHOULD support authentication on a context granularity so
+   that different contexts running on a client can use different
+   cryptographic keys and facilities.
+
+3.3.  Label Encoding, Label Format Specifiers, and Label Checking
+      Authorities
+
+   Encoding of MAC labels and attributes passed over the network MUST be
+   specified in a complete and unambiguous manner while maintaining the
+   flexibility of MAC implementations.  To accomplish <strike><font color='red'>this</font></strike> <strong><font color='green'>this,</font></strong> the labels
+   MUST consist of a format-specific component bound with a Label Format
+   Specifier (LFS).  The LFS component provides a mechanism for
+   identifying the structure and semantics of the opaque component.
+   Meanwhile, the opaque component is the security label <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> will be
+   interpreted by the MAC models.
+
+   MAC models base access decisions on security <strike><font color='red'>attributes priveleges</font></strike> <strong><font color='green'>attribute privileges</font></strong>
+   bound to subjects and objects, respectively.  With a given MAC model,
+   all systems have semantically coherent labeling <strike><font color='red'>-</font></strike> <strong><font color='green'>--</font></strong> a security label
+   MUST always mean exactly the same thing on every system.  While this
+   may not be necessary for simple MAC <strike><font color='red'>models</font></strike> <strong><font color='green'>models,</font></strong> it is recommended that
+   most label formats assigned an LFS incorporate semantically coherent
+   labeling into their label format.
+
+   Labeled NFS SHOULD define an initial negotiation scheme with the
+   primary aims of simplicity and completeness.  This is to facilitate
+   practical deployment of systems without being weighed down by complex
+   and <strike><font color='red'>over-generalized</font></strike> <strong><font color='green'>overgeneralized</font></strong> global schemes.  Future extensibility SHOULD also
+   be taken into consideration.
+
+   Labeled NFS MUST provide a means for servers and clients to identify
+   their <strike><font color='red'>LFS</font></strike> <strong><font color='green'>LFSs</font></strong> for the purposes of authorization, security service
+   selection, and security label interpretation.
+
+   Labeled NFS MUST provide a means for servers and clients to identify
+   their mode of operation (see Section 4).
+
+   A negotiation scheme SHOULD be provided, allowing systems from
+   different label formats to agree on how they will interpret or
+   translate each <strike><font color='red'>others</font></strike> <strong><font color='green'>other's</font></strong> foreign labels.  Multiple concurrent
+   agreements may be current between a server and a client.
+
+   All security labels and related security state transferred across the
+   network MUST be tagged with a valid LFS.
+
+   If the LFS supported on a system changes, the system SHOULD
+   renegotiate agreements to reflect these changes.
+
+   If a system receives any security label or security state tagged with
+   an LFS it does not recognize or cannot interpret, it MUST reject that
+   label or state.
+
+   NFSv4.2 includes features <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> may cause a client to cross an LFS
+   boundary when accessing what appears to be a single file system.  If
+   LFS negotiation is supported by the client and the server, the server
+   SHOULD negotiate a new, concurrent agreement with the client, acting
+   on behalf of the externally located source of the files.
+
+3.4.  Labeling
+
+   Implementations MUST validate security labels supplied over the
+   network to ensure that they are within a set of labels permitted from
+   a specific <strike><font color='red'>peer, and</font></strike> <strong><font color='green'>peer and,</font></strong> if not, reject them.  Note that a system may
+   permit a different set of labels to be accepted from each peer.
+
+3.4.1.  Client Labeling
+
+   At the client, labeling semantics for NFS mounted file systems MUST
+   remain consistent with those for locally mounted file systems.  In
+   particular, user-level labeling operations local to the client MUST
+   be enacted locally via existing APIs, to ensure compatibility and
+   consistency for applications and libraries.
+
+   Note that this does not imply any specific mechanism for conveying
+   labels over the network.
+
+   When an object is newly created by the client, it will calculate the
+   label for the object based on its policy.  Once that is <strike><font color='red'>done</font></strike> <strong><font color='green'>done,</font></strong> it will
+   send the request to the <strike><font color='red'>server</font></strike> <strong><font color='green'>server,</font></strong> which has the ability to deny the
+   creation of the object with that label based on the server's policy.
+   In creating the <strike><font color='red'>file</font></strike> <strong><font color='green'>file,</font></strong> the server MUST ensure that the label is bound
+   to the object before the object becomes visible to the rest of the
+   system.  This ensures that any access control or further labeling
+   decisions are correct for the object.
+
+3.4.2.  Server Labeling
+
+   The server MUST provide the capability for clients to retrieve
+   security labels on all exported file system objects where possible.
+   This includes cases where only in-core and/or read-only security
+   labels are available at the server for any of its exported file
+   systems.
+
+   The server MUST honor the ability for a client to specify the label
+   of an object on creation.  If the server is MAC <strike><font color='red'>enabled</font></strike> <strong><font color='green'>enabled,</font></strong> it may
+   choose to reject the label specified by the <strike><font color='red'>client</font></strike> <strong><font color='green'>client,</font></strong> due to
+   restrictions in the server policy.  The server SHOULD NOT attempt to
+   find a suitable label for an object in <strong><font color='green'>the</font></strong> event of different
+   labeling rules on its end.  The server is allowed to translate the
+   label but MUST NOT change the semantic meaning of the label.
+
+3.5.  Policy Enforcement
+
+   The MAC-Functional client determines if a process request is sent to
+   the remote server.  Upon a successful response from the server, it
+   must use its own policies on the object's security labels to
+   determine if the process can be given access.  The client SHOULD NOT
+   need to be cognizant if the server is either a Limited Server or
+   fully MAC-Functional.
+
+3.5.1.  Client Enforcement
+
+   The client MUST apply its own policy to remotely located objects,
+   using security labels for the objects obtained from the server.  It
+   MUST be possible to configure the maximum length of time a client may
+   cache state regarding remote labels before <strike><font color='red'>re-validating</font></strike> <strong><font color='green'>revalidating</font></strong> that state
+   with the server.
+
+   If the server's policy changes, the client MUST flush all object
+   state back to the server.  The server MUST ensure that any flushed
+   state received is consistent with current policy before committing it
+   to stable storage.
+
+   Any local security state associated with cached or delegated objects
+   MUST also be flushed back to the server when any other state of the
+   objects is required to be flushed back.
+
+   The implication here is that if the client holds a delegation on an
+   object, then it enforces policy to local changes based on the object
+   label it got from the server.  When it tries to commit those changes
+   to the server, it SHOULD be prepared for the server to reject those
+   changes based on the policies of the server.
+
+3.5.2.  Server Enforcement
+
+   A MAC-Functional server MUST enforce its security policy over all
+   exported objects, for operations <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> originate both locally and
+   remotely.
+
+   Requests from authenticated clients MUST be processed using security
+   labels and credentials supplied by the client as if they originated
+   locally.
+
+   As with labeling, the system MUST also take into account any other
+   volatile client security state, such as a change in process security
+   context via dynamic transition.  Access decisions SHOULD also be made
+   based upon the current client security label accessing the object,
+   rather than the security label <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> opened it, if different.
+
+   The server SHOULD recall delegation of an object if the object's
+   security label changes.
+
+3.6.  Namespace Access
+
+   The server SHOULD provide a means to authorize selective access to
+   the exported file system namespace based upon client credentials and
+   according to security policy.
+
+   This is a common requirement of MLS-enabled systems, which often need
+   to present selective views of namespaces based upon the clearances of
+   the subjects.
+
+3.7.  Upgrading Existing Server
+
+   Note that under the MAC model, all objects MUST have labels.
+   Therefore, if an existing server is upgraded to include Labeled NFS
+   support, then it is the responsibility of the security system to
+   define the behavior for existing objects.
+
+4.  Modes of Operation
+
+   In a Labeled NFS client and server interaction, we can describe three
+   modes of operation:
+
+   1.  Full
+
+   2.  Limited Server
+
+   3.  Guest
+
+   These modes arise from the level of MAC functionality in the clients
+   and servers.  The clients can be non-MAC-Functional and MAC-
+   Functional.  The servers can be non-MAC-Functional, MAC-Aware, and
+   MAC-Functional.
+
+   A MAC-Functional client MUST be able to determine the level of MAC
+   functionality in the server.  Likewise, a MAC-Functional server MUST
+   be able to determine whether or not a client is MAC-Functional.  As
+   discussed in Section 3.3, the protocol MUST provide for the client
+   and server to make those determinations.
+
+4.1.  Full Mode
+
+   The server and the client have mutually recognized MAC functionality
+   enabled, and full Labeled NFS functionality is extended over the
+   network between both client and server.
+
+   An example of an operation in full mode is as follows.  On the
+   initial lookup, the client requests access to an object on the
+   server.  It sends its process security context over to the server.
+   The server checks all relevant policies to determine if that process
+   context from that client is allowed to access the resource.  Once
+   this has <strike><font color='red'>succeeded</font></strike> <strong><font color='green'>succeeded,</font></strong> the <strike><font color='red'>object</font></strike> <strong><font color='green'>object,</font></strong> with its associated security
+   <strike><font color='red'>information</font></strike>
+   <strong><font color='green'>information,</font></strong> is released to the client.  Once the client receives the
+   <strike><font color='red'>object</font></strike>
+   <strong><font color='green'>object,</font></strong> it determines if its policies allow the process running on
+   the client access to the object.
+
+   On subsequent operations where the client already has a handle for
+   the file, the order of enforcement is reversed.  Since the client
+   already has the security <strike><font color='red'>context</font></strike> <strong><font color='green'>context,</font></strong> it may make an access decision
+   against its policy first.  This enables the client to avoid sending
+   requests to the server that it knows will <strike><font color='red'>fail</font></strike> <strong><font color='green'>fail,</font></strong> regardless of the
+   server's policy.  If the client passes its policy <strike><font color='red'>checks</font></strike> <strong><font color='green'>checks,</font></strong> then it
+   sends the request to the <strike><font color='red'>server</font></strike> <strong><font color='green'>server,</font></strong> where the client's process context
+   is used to determine if the server will release that resource to the
+   client.  If both checks pass, the client is given the resource and
+   everything succeeds.
+
+   In the event that the client does not trust the server, it may opt to
+   use an alternate labeling <strike><font color='red'>mechanism</font></strike> <strong><font color='green'>mechanism,</font></strong> regardless of the server's
+   ability to return security information.
+
+4.2.  Limited Server Mode
+
+   The server is <strike><font color='red'>MAC-Aware</font></strike> <strong><font color='green'>MAC-Aware,</font></strong> and the clients are MAC-Functional.  The
+   server can store and transmit labels.  It cannot enforce labels.  The
+   server MUST inform clients when an object label changes for a file
+   the client has open.
+
+   In this mode, the server may not be aware of the format of any <strong><font color='green'>of</font></strong> its
+   object labels.  Indeed, it may service several different security
+   models at the same time.  A client MUST process foreign labels as
+   discussed in Section 3.3.  As with the Guest Mode, this mode's level
+   of trust can be degraded if <strike><font color='red'>non-MAC-functional</font></strike> <strong><font color='green'>non-MAC-Functional</font></strong> clients have access to
+   the server.
+
+4.3.  Guest Mode
+
+   Only one of the server or client is MAC-Functional enabled.
+
+   In the case of the server only being MAC-Functional, the server
+   enforces its <strike><font color='red'>policy,</font></strike> <strong><font color='green'>policy</font></strong> and may selectively provide standard NFS services
+   to clients based on their authentication credentials and/or
+   associated network attributes (e.g., IP address, network interface)
+   according to security policy.  The level of trust and access extended
+   to a client in this mode is configuration-specific.
+
+   In the case of the client only being MAC-Functional, the client MUST
+   operate as a standard NFSv4.2 (see <strike><font color='red'>[I-D.ietf-nfsv4-minorversion2])
+   client,</font></strike> <strong><font color='green'>[NFSv4_2]) client</font></strong> and SHOULD
+   selectively provide processes access to servers based upon the
+   security attributes of the local process, and network attributes of
+   the server, according to policy.  The client may also override
+   default labeling of the remote file system based upon these security <strike><font color='red'>attributes,</font></strike>
+   <strong><font color='green'>attributes</font></strong> or other labeling methods such as mount point labeling.
+
+   In other words, <strong><font color='green'>the</font></strong> Guest Mode is standard NFSv4.2 over the wire,
+   with the MAC-Functional system mapping the non-MAC-Functional
+   system's processes or objects to security labels based on other
+   characteristics in order to preserve its MAC guarantees.
+
+5.  Use Cases
+
+   MAC labeling is meant to allow NFSv4.2 to be deployed in <strike><font color='red'>site</font></strike> <strong><font color='green'>site-</font></strong>
+   configurable security schemes.  The LFS and opaque data scheme allows
+   for flexibility to meet these different implementations.  In this
+   section, we provide some examples of how NFSv4.2 could be deployed to
+   meet existing needs.  This is not an exhaustive listing.
+
+5.1.  Full MAC <strike><font color='red'>labeling support</font></strike> <strong><font color='green'>Labeling Support</font></strong> for <strike><font color='red'>remotely mounted filesystems</font></strike> <strong><font color='green'>Remotely Mounted Filesystems</font></strong>
+
+   In this case, we assume a local networked environment where the
+   servers and clients are under common administrative control.  All
+   systems in this network have the same MAC implementation and
+   semantically identical MAC security labels for objects <strike><font color='red'>(i.e.</font></strike> <strong><font color='green'>(i.e.,</font></strong> labels
+   mean the same thing on different systems, even if the policies on
+   each system may differ to some extent).  Clients will be able to
+   apply fine-grained MAC policy to objects accessed via NFS <strike><font color='red'>mounts,</font></strike> <strong><font color='green'>mounts</font></strong> and
+   thus improve the overall consistency of MAC policy application within
+   this environment.
+
+   An example of this case would be where user home directories are
+   remotely mounted, and fine-grained MAC policy is implemented to
+   protect, for example, private user data from being read by malicious
+   web scripts running in the user's browser.  With Labeled NFS, fine-
+   grained MAC labeling of the user's files will allow the MAC policy to
+   be implemented and provide the desired protection.
+
+5.2.  MAC <strike><font color='red'>labeling</font></strike> <strong><font color='green'>Labeling</font></strong> of <strike><font color='red'>virtual machine images stored</font></strike> <strong><font color='green'>Virtual Machine Images Stored</font></strong> on the <strike><font color='red'>network</font></strike> <strong><font color='green'>Network</font></strong>
+
+   Virtualization is now a commonly implemented feature of modern
+   operating systems, and there is a need to ensure that MAC security
+   policy is able to protect virtualized resources.  A common
+   implementation scheme involves storing virtualized guest filesystems
+   on a networked <strike><font color='red'>server, which</font></strike> <strong><font color='green'>server; these filesystems</font></strong> are then mounted remotely by
+   guests upon instantiation.  In this case, there is a need to ensure
+   that the local guest kernel is able to access fine-grained MAC labels
+   on the remotely mounted filesystem so that its MAC security policy
+   can be applied.
+
+5.3.  Simple <strike><font color='red'>security label storage</font></strike> <strong><font color='green'>Security Label Storage</font></strong>
+
+   In this case, a mixed and loosely administered network is assumed,
+   where nodes may be running a variety of operating systems with
+   different security mechanisms and security policies.  It is desired
+   that network file servers be simply capable of storing and retrieving
+   MAC security labels for clients <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> use such labels.  The Labeled
+   NFS protocol would be implemented here solely to enable transport of
+   MAC security labels across the network.  It should be noted that in
+   such an environment, overall security cannot be as strongly enforced
+   as when the server is also <strike><font color='red'>enforcing,</font></strike> <strong><font color='green'>enforcing</font></strong> and that this scheme is aimed at
+   allowing MAC-capable clients to function with its MAC security policy
+   enabled rather than perhaps disabling it entirely.
+
+5.4.  Diskless Linux
+
+   A number of popular operating system distributions depend on a
+   <strike><font color='red'>mandatory access control</font></strike>
+   <strong><font color='green'>Mandatory Access Control</font></strong> (MAC) model to implement a kernel-enforced
+   security policy.  Typically, such models assign particular roles to
+   individual processes, which limit or permit performing certain
+   operations on a set of files, directories, sockets, or other objects.
+   While the enforcing of the policy is typically a matter for the
+   diskless NFS client itself, the filesystem objects in such models
+   will typically carry MAC labels that are used to define policy on
+   access.  These policies may, for instance, describe privilege
+   transitions that cannot be replicated using standard NFS <strike><font color='red'>ACL based</font></strike> <strong><font color='green'>ACL-based</font></strong>
+   models.
+
+   For <strike><font color='red'>instance</font></strike> <strong><font color='green'>instance,</font></strong> on a <strike><font color='red'>SYSV compatible</font></strike> <strong><font color='green'>SYSV-compatible</font></strong> system, if the 'init' process
+   spawns a process that attempts to start the 'NetworkManager'
+   executable, there may be a policy that sets up a role transition if
+   the 'init' process and 'NetworkManager' file labels match a
+   particular rule.  Without this role transition, the process may find
+   itself having insufficient privileges to perform its primary job of
+   configuring network interfaces.
+
+   In setups of this type, a lot of the policy targets (such as sockets
+   or privileged system calls) are entirely local to the client.  The
+   use of RPCSEC_GSSv3 <strike><font color='red'>([rpcsecgssv3])</font></strike> <strong><font color='green'>([RPC_SEC])</font></strong> for enforcing compliance at the
+   server level is therefore of limited value.  The ability to
+   permanently label files and have those labels read back by the client
+   is, however, crucial to the ability to enforce that policy.
+
+5.5.  Multi-Level Security
+
+   In <strike><font color='red'>a</font></strike> <strong><font color='green'>an</font></strong> MLS <strike><font color='red'>system</font></strike> <strong><font color='green'>system,</font></strong> objects are generally assigned a sensitivity level
+   and a set of compartments.  The sensitivity levels within the system
+   are given an order ranging from lowest to highest classification
+   level.  Read access to an object is allowed when the sensitivity
+   level of the subject "dominates" the object it wants to access.  This
+   means that the sensitivity level of the subject is higher than that
+   of the object it wishes to access and that its set of compartments is
+   a <strike><font color='red'>super-set</font></strike> <strong><font color='green'>superset</font></strong> of the compartments on the object.
+
+   The rest of <strike><font color='red'>the</font></strike> <strong><font color='green'>this</font></strong> section will just use sensitivity levels.  In <strike><font color='red'>general</font></strike>
+   <strong><font color='green'>general,</font></strong> the example is a client that wishes to list the contents of
+   a directory.  The system defines the sensitivity levels as
+   Unclassified (U), Secret (S), and Top Secret (TS).  The directory to
+   be searched is labeled Top <strike><font color='red'>Secret</font></strike> <strong><font color='green'>Secret,</font></strong> which means access to read the
+   directory will only be granted if the subject making the request is
+   also labeled Top Secret.
+
+5.5.1.  Full Mode - <strike><font color='red'>MAC-functional</font></strike> <strong><font color='green'>MAC-Functional</font></strong> Client and Server
+
+   In the first part of this <strike><font color='red'>example</font></strike> <strong><font color='green'>example,</font></strong> a process on the client is running
+   at the Secret level.  The process issues a readdir() system <strike><font color='red'>call</font></strike> <strong><font color='green'>call,</font></strong>
+   which enters the kernel.  Before translating the readdir() system
+   call into a request to the NFSv4.2 <strike><font color='red'>server</font></strike> <strong><font color='green'>server,</font></strong> the host operating system
+   will consult the MAC module to see if the operation is allowed.
+   Since the process is operating at Secret and the directory to be
+   accessed is labeled Top <strike><font color='red'>Secret</font></strike> <strong><font color='green'>Secret,</font></strong> the MAC module will deny the request
+   and an error code is returned to user space.
+
+   Consider a second case where instead of running at Secret the process
+   is running at Top Secret.  In this <strike><font color='red'>case</font></strike> <strong><font color='green'>case,</font></strong> the sensitivity of the
+   process is equal to or greater than that of the <strike><font color='red'>directory</font></strike> <strong><font color='green'>directory,</font></strong> so the MAC
+   module will allow the request.  Now the readdir() is translated into
+   the necessary NFSv4.2 call to the server.  For the <strike><font color='red'>RPC request</font></strike> <strong><font color='green'>remote procedure
+   call (RPC) request,</font></strong> the client is using the proper credential to
+   assert to the server that the process is running at Top Secret.
+
+   When the server receives the <strike><font color='red'>request</font></strike> <strong><font color='green'>request,</font></strong> it extracts the security label
+   from the RPC session and retrieves the label on the directory.  The
+   server then checks with its MAC module <strong><font color='green'>to see</font></strong> if a Top Secret process
+   is allowed to read the contents of the Top Secret directory.  Since
+   this is allowed by the <strike><font color='red'>policy</font></strike> <strong><font color='green'>policy,</font></strong> then the server will return the
+   appropriate information back to the client.
+
+   In this <strike><font color='red'>example</font></strike> <strong><font color='green'>example,</font></strong> the policy on <strong><font color='green'>both</font></strong> the client and server <strike><font color='red'>were both</font></strike> <strong><font color='green'>is</font></strong> the
+   same.  In the event that they were running different <strike><font color='red'>policies</font></strike> <strong><font color='green'>policies,</font></strong> a
+   translation of the labels might be needed.  In this <strike><font color='red'>case</font></strike> <strong><font color='green'>case,</font></strong> it could be
+   possible for a check to pass on the client and fail on the server.
+   The server may consider additional information when making its policy
+   decisions.  For <strike><font color='red'>example</font></strike> <strong><font color='green'>example,</font></strong> the server could determine that a certain
+   subnet is only cleared for data up to Secret classification.  If that
+   constraint was in place for the example <strike><font color='red'>above</font></strike> <strong><font color='green'>above,</font></strong> the client would still
+   succeed, but the server would <strike><font color='red'>fail</font></strike> <strong><font color='green'>fail,</font></strong> since the client is asserting a
+   label that it is not able to use (Top Secret on a Secret network).
+
+5.5.2.  MAC-Functional Client
+
+   In these scenarios, the server is either non-MAC-Aware or MAC-Aware.
+   The actions of the client will depend <strong><font color='green'>on</font></strong> whether it is configured to
+   treat the MAC-Aware server in the same manner as the non-MAC-Aware
+   one.  <strike><font color='red'>I.e.,</font></strike>  <strong><font color='green'>That is,</font></strong> does it utilize the approach presented in Section <strike><font color='red'>4.3</font></strike> <strong><font color='green'>4.3,</font></strong>
+   or does it allow the MAC-Aware server to return labels?
+
+   With a client that is MAC-Functional and using the example in the
+   previous section, the result should be the same.  The one difference
+   is that all decisions are made on the client.
+
+5.5.2.1.  MAC-Aware Server
+
+   A process on the client labeled Secret wishes to access a directory
+   labeled Top Secret on the server.  This is <strike><font color='red'>denied</font></strike> <strong><font color='green'>denied,</font></strong> since Secret does
+   not dominate Top Secret.  Note that there will be NFSv4.2 operations
+   issued that return an object label for the client to process.
+
+   Note that in this scenario, all of the clients must be MAC-
+   Functional.  A single client <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> does not do its access control
+   checks would violate the model.
+
+5.5.2.2.  Non-MAC-Aware Server
+
+   A process on the client labeled Secret wishes to access a directory
+   <strike><font color='red'>which</font></strike>
+   <strong><font color='green'>that</font></strong> the client's policies label as Top Secret on the server.  This
+   is <strike><font color='red'>denied</font></strike> <strong><font color='green'>denied,</font></strong> since Secret does not dominate Top Secret.  Note that
+   there will not be NFSv4.2 operations issued.  If the process had <strike><font color='red'>instead</font></strike> a
+   Top Secret process <strike><font color='red'>label,</font></strike> <strong><font color='green'>label instead of Secret,</font></strong> the client would issue
+   NFSv4.2 operations to access the directory on the server.
+
+5.5.3.  MAC-Functional Server
+
+   With a MAC-Functional server and a client <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> is not, the client
+   behaves as if it were in a normal NFSv4.2 environment.  Since the
+   process on the client does not provide a security <strike><font color='red'>attribute</font></strike> <strong><font color='green'>attribute,</font></strong> the
+   server must define a mechanism for labeling all requests from a
+   client.  Assume that the server is using the same criteria used in
+   the first example.  The server sees the request as coming from a
+   subnet that is a Secret network.  The server determines that all
+   clients on that subnet will have their requests labeled with Secret.
+   Since the directory on the server is labeled Top Secret and Secret
+   does not dominate Top <strike><font color='red'>Secret</font></strike> <strong><font color='green'>Secret,</font></strong> the server would fail the request with
+   NFS4ERR_ACCESS.
+
+6.  <strike><font color='red'>IANA Considerations
+
+   This document has no actions for IANA.
+
+7.</font></strike>  Security Considerations
+
+<strike><font color='red'>7.1.</font></strike>
+
+<strong><font color='green'>6.1.</font></strong>  Trust Needed for a Community
+
+   Labeled NFS is a transport mechanism for labels, a storage
+   requirement for labels, and a definition of how to interpret labels.
+   It defines the responsibilities of the client and the server in the
+   various permutations of being MAC-Functional.  It does <strike><font color='red'>not however</font></strike> <strong><font color='green'>not, however,</font></strong>
+   dictate in any manner whether assumptions can be made about other
+   entities in the relationship.  For example, it does not define
+   whether a MAC-Functional client can demand that a MAC-Aware server
+   only accept requests from other MAC-Functional clients.  That is a
+   policy based <strike><font color='red'>in</font></strike> <strong><font color='green'>on</font></strong> a MAC <strike><font color='red'>model</font></strike> <strong><font color='green'>model,</font></strong> and this document does not impose
+   policies on systems.
+
+   As the requirement is a policy, it can be met with the use of a MAC
+   model.  Let L be <strike><font color='red'>a</font></strike> <strong><font color='green'>an</font></strong> LFS <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> implements the Limited Server mode,
+   i.e., a MAC-Aware server connected to MAC-Functional clients.  Then a
+   new <strike><font color='red'>LFS L'</font></strike> <strong><font color='green'>LFS, L',</font></strong> can be created <strike><font color='red'>which</font></strike> <strong><font color='green'>that</font></strong> has the additional policy that the
+   MAC-Aware server MUST NOT accept any requests from a non-MAC-
+   Functional client.
+
+<strike><font color='red'>7.2.</font></strike>
+
+<strong><font color='green'>6.2.</font></strong>  Guest Modes
+
+   When either the client or server is operating in guest <strike><font color='red'>mode</font></strike> <strong><font color='green'>mode,</font></strong> it is
+   important to realize that one side is not enforcing MAC protections.
+   Alternate methods are being used to handle the lack of MAC <strike><font color='red'>support</font></strike> <strong><font color='green'>support,</font></strong>
+   and care should be taken to identify and mitigate threats from
+   possible tampering outside of these methods.
+
+<strike><font color='red'>7.3.</font></strike>
+
+<strong><font color='green'>6.3.</font></strong>  MAC-Functional Client Configuration
+
+   We defined a MAC model as <strike><font color='red'>a</font></strike> <strong><font color='green'>an</font></strong> access control decision made on a system
+   <strong><font color='green'>in</font></strong> which normal users do not have the ability to override policies
+   (see Section 1).  If the process labels are created solely on the
+   client, then if a malicious user has sufficient access on that
+   client, the Labeled NFS model is compromised.  Note that this is no
+   different from:
+
+   o  current implementations in which the server uses policies to
+      effectively determine the object label for requests from the
+      client, or
+
+   o  local decisions made on the client by the MAC security system.
+
+   <strike><font color='red'>The</font></strike>
+
+   <strong><font color='green'>Either the</font></strong> server must <strike><font color='red'>either</font></strike> explicitly trust the client (as in <strike><font color='red'>[SENFSV3])</font></strike> <strong><font color='green'>[SENFSv3])</font></strong>
+   or the MAC model should enforce that users cannot override policies,
+   perhaps via <strike><font color='red'>a</font></strike> <strong><font color='green'>an</font></strong> externally managed source.
+
+   Once the labels leave the client, they can be protected by the
+   transport mechanism as described in Section 3.2.
+
+<strike><font color='red'>8.</font></strike>
+
+<strong><font color='green'>7.</font></strong>  References
+
+<strike><font color='red'>8.1.</font></strike>
+
+<strong><font color='green'>7.1.</font></strong>  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", <strong><font color='green'>BCP 14, RFC 2119,</font></strong> March 1997.
+
+<strike><font color='red'>8.2.</font></strike>
+
+<strong><font color='green'>7.2.</font></strong>  Informative References
+
+   [DTOS]     Smalley, S., "The Distributed Trusted Operating System
+              (DTOS) Home <strike><font color='red'>Page ",</font></strike> <strong><font color='green'>Page",</font></strong> December 2000, <strike><font color='red'>&lt;http://www.cs.utah.edu
+              /flux/fluke/html/dtos/HTML/dtos.html&gt;.
+
+   [I-D.ietf-nfsv4-minorversion2]</font></strike> <strong><font color='green'>&lt;http://www.cs.utah.edu/
+              flux/fluke/html/dtos/HTML/dtos.html&gt;.
+
+   [LFSReg]   Quigley, D. and J. Lu, "Registry Specification for MAC
+              Security Label Formats", Work in Progress, March 2011.
+
+   [NFSv4_2]</font></strong>  Haynes, T., "NFS Version 4 Minor Version 2", <strike><font color='red'>draft-ietf-
+              nfsv4-minorversion2-21 (Work In Progress), November 2013.</font></strike> <strong><font color='green'>Work in
+              Progress, February 2014.</font></strong>
+
+   [RFC4949]  Shirey, R., "Internet Security Glossary, Version 2", <strong><font color='green'>RFC
+              4949,</font></strong> August 2007.
+
+   [RH_MLS]   <strike><font color='red'>"Section 46.6. Multi-Level</font></strike>   <strong><font color='green'>"Multi-Level</font></strong> Security <strike><font color='red'>(MLS) of Deployment
+              Guide: Deployment,</font></strike> <strong><font color='green'>(MLS)", "Deployment,</font></strong> configuration
+              and administration of Red Hat Enterprise Linux 5, Edition <strike><font color='red'>6 ", 2011.
+
+   [SENFSV3]  Carter, J., "Implementing SELinux Support for NFS", ,
+              &lt;http://www.nsa.gov/research/_files/selinux/papers/
+              nfsv3.pdf&gt;.
+
+   [lfsreg]   Quigley, D. and J. Lu, "Registry Specification for MAC
+              Security Label Formats", draft-quigley-label-format-
+              registry (work in progress), 2011.
+
+   [rpcsecgssv3]</font></strike>
+              <strong><font color='green'>10", Section 49.6, 2013, &lt;http://docs.redhat.com/docs/
+              en-US/Red_Hat_Enterprise_Linux/5/html/Deployment_Guide/
+              sec-mls-ov.html&gt;.
+
+   [RPC_SEC]</font></strong>  Adamson, W. and N. Williams, "Remote Procedure Call (RPC)
+              Security Version 3", <strike><font color='red'>draft-ietf-nfsv4-rpcsec-gssv3-05
+              (Work In Progress), October 2013.</font></strike> <strong><font color='green'>Work in Progress, February 2014.
+
+   [SENFSv3]  Carter, J., "Implementing SELinux Support for NFS",
+              &lt;http://www.nsa.gov/research/_files/selinux/papers/
+              nfsv3.pdf&gt;.</font></strong>
+
+Appendix A.  Acknowledgments
+
+   David Quigley was the early energy in motivating the entire Labeled
+   NFS effort.
+
+   James Morris, Jarrett Lu, and Stephen Smalley all were key
+   contributors to both early versions of this document and to many
+   conference calls.
+
+   Kathleen Moriarty provided use cases for earlier versions of the
+   <strike><font color='red'>draft.</font></strike>
+   <strong><font color='green'>document.</font></strong>
+
+   Dan Walsh provided use cases for Secure Virtualization, Sandboxing,
+   and NFS homedir labeling to handle process separation.
+
+   Trond Myklebust provided use cases for secure diskless NFS clients.
+
+   Both Nico Williams and Bryce Nordgren challenged assumptions during
+   the review processes.
+
+<strike><font color='red'>Appendix B.  RFC Editor Notes
+
+   [RFC Editor: please remove this section prior to publishing this
+   document as an RFC]
+
+   [RFC Editor: prior to publishing this document as an RFC, please
+   replace all occurrences of RFCTBD10 with RFCxxxx where xxxx is the
+   RFC number of this document]</font></strike>
+
+Author's Address
+
+   Thomas Haynes
+   NetApp
+   495 <strike><font color='red'>E</font></strike> <strong><font color='green'>East</font></strong> Java <strike><font color='red'>Dr</font></strike> <strong><font color='green'>Dr.</font></strong>
+   Sunnyvale, CA  <strike><font color='red'>95054</font></strike>  <strong><font color='green'>94089</font></strong>
+   USA
+
+   Phone: +1 408 419 3018
+   <strike><font color='red'>Email:</font></strike>
+   <strong><font color='green'>EMail:</font></strong> thomas@netapp.com
+</pre>
+</body></html>
